@@ -9,7 +9,7 @@
 
 
 
-int main(){
+int notMain(){
 
 	return 0;
 }
