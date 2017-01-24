@@ -13,13 +13,7 @@
  */
 
 
-#include "RBELib/RBELib.h"
-//For use of abs()
-#include <stdlib.h>
-
-#define F100HZ 75
-#define F20HZ 375
-#define F1HZ 7500
+#include "Lab1_ADCandWaveform.h"
 
 
 //character for receiving serial data
