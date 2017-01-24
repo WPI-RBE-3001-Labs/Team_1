@@ -9,10 +9,11 @@
 #include "RBELib/RBELib.h"
 #include <avr/io.h>
 #include <stdlib.h>
+#include "GlobalDefines.h"
 
 unsigned int aDelay;
-#define BAUD 9600
-#define BAUDRATE ((F_CPU)/(BAUD*16UL)-1) // calculation to set baudrate in the registers
+
+const static unsigned int FOSC = 1843200;
 
 /**
  * @brief Initializes USART1 as a print terminal to the PC. This function
@@ -25,10 +26,12 @@ unsigned int aDelay;
  * @todo Create the function that will initialize USART1 for debugging use.
  */
 void debugUSARTInit(unsigned long baudrate){
-	UBRR1H = (BAUDRATE>>8); //shits the register to the right by 8 bits which splits up UBRR
-	UBRR1L = BAUDRATE;
-	UCSR1B |= 0b00011000; //(1<<TXEN)|(1<<RXEN); //sets the receiving and transmitting bits to one so they are enabled
-	UCSR1C |= (1<<URSEL)|(1<<UCSZ0)|(1<<UCSZ1); //8 bit data format
+
+	unsigned long myubrr = ((FOSC)/(baudrate*16UL)-1)
+	UBRR1H = (myubrr>>8); //shifts the register to the right by 8 bits which splits up UBRR
+	UBRR1L = myubrr;
+	UCSR1B = 0b00011000; //(1<<TXEN1)|(1<<RXEN1); //sets the receiving and transmitting bits to one so they are enabled
+	UCSR1C = 0b01000110; //(1<<URSEL)|(1<<UCSZ0)|(1<<UCSZ1) 8 bit data format
 }
 
 /**
@@ -39,8 +42,8 @@ void debugUSARTInit(unsigned long baudrate){
  * @todo Make the function that will put a character on the USART1 TX line.
  */
 void putCharDebug(char byteToSend){
-	while (1(UCSR1A & (1<<UDRE))); // wait while the register is free
-	UDR = data; //upload data to register
+	while (!(UCSR1A & BIT5)); // wait while the register is free
+	UDR1 = byteToSend; //upload data to register
 }
 
 /**
@@ -51,6 +54,6 @@ void putCharDebug(char byteToSend){
  * @todo Make the function that will listen for input on the USART1 RX line.
  */
 unsigned char getCharDebug(void){
-	while(!(UCSR1A) & (1<<RXC));
-	return UDR;
+	while(!(UCSR1A) & BIT7);
+	return UDR1;
 }
