@@ -8,8 +8,8 @@
 
 /* main.c
  *
- *  Created on: August 20, 2016
- *      Author: Joest
+ *  Created on: January 22nd, 2017
+ *      Author: mphopkins
  */
 
 
@@ -26,10 +26,7 @@ int outputState = 0;
 double dutyCycle = 20;
 volatile int timerCount = 0;
 
-int main(void)
-{
-	initRBELib();
-
+void Lab1init(void){
 	//Timer Setup
 	TIMSK0 = 0b10; //Enable Interrupt
 	TCCR0A=0; //Pin setting and waveform gen setting
@@ -54,90 +51,62 @@ int main(void)
 	ADCSRA = 0b11100000;
 	ADCSRB = 0b00000100;
 	ADCSRA |= 0x40; //Starts conversion
-	while(1)
+}
+
+void Lab1loop(void){
+
+	if(~PINB & 0b1) //if PORT B0 is low change frequency
 	{
-		if(~PINB & 0b1) //if PORT B0 is low change frequency
-		{
-			compareCounter = F1HZ;
-		}
+		compareCounter = F1HZ;
+	}
 
-		if(~PINB & 0b10) //if PORT B1 is low change frequency
-		{
-			compareCounter = F20HZ;
-		}
+	if(~PINB & 0b10) //if PORT B1 is low change frequency
+	{
+		compareCounter = F20HZ;
+	}
 
-		if(~PINB & 0b100) //if PORT B2 is low change frequency
-		{
-			compareCounter = F100HZ;
-		}
+	if(~PINB & 0b100) //if PORT B2 is low change frequency
+	{
+		compareCounter = F100HZ;
+	}
 
-		if(outputState == 0 && timerCount > (compareCounter *2.0 * (100.0 - dutyCycle))/100.0)
-		{
-			timerCount = 0;
-			TCNT0=0;
-			PORTA = 0xFF;
-			outputState = 1;
-		}
+	if(outputState == 0 && timerCount > (compareCounter *2.0 * (100.0 - dutyCycle))/100.0)
+	{
+		timerCount = 0;
+		TCNT0=0;
+		PORTA = 0xFF;
+		outputState = 1;
+	}
 
-		if(outputState == 1 && timerCount > (compareCounter *2.0 * dutyCycle)/100.0)
-		{
-			timerCount = 0;
-			TCNT0=0;
-			PORTA = 0;
-			outputState = 0;
-		}
+	if(outputState == 1 && timerCount > (compareCounter *2.0 * dutyCycle)/100.0)
+	{
+		timerCount = 0;
+		TCNT0=0;
+		PORTA = 0;
+		outputState = 0;
+	}
 
 
-		if(ADCSRA & 0x10) //if conversion is complete
-		{
-			/*
-			dutyCycle = ADCH;
-			dutyCycle = dutyCycle * 0.08 + 10;
-			if(dutyCycle < 10)
-			{
-				dutyCycle = 10;
-			}
-			if(dutyCycle > 90)
-			{
-				dutyCycle = 90;
-			}
-			*/
+	if(ADCSRA & 0x10) //if conversion is complete
+	{
+		/*
+				dutyCycle = ADCH;
+				dutyCycle = dutyCycle * 0.08 + 10;
+				if(dutyCycle < 10)
+				{
+					dutyCycle = 10;
+				}
+				if(dutyCycle > 90)
+				{
+					dutyCycle = 90;
+				}
+		 */
 
-			dutyCycle +=.001;
-		}
+		dutyCycle +=.001;
 	}
 }
 
-ISR(TIMER0_COMPA_vect)
-{
+ISR(TIMER0_COMPA_vect){
 	timerCount++;
 	TCNT0=0;
 }
-
-void oldCode(void){
-	//Enable printf() and setServo()
-	initRBELib();
-
-	// Write the USARTDebug.c file using the function prototypes in the H file to enable the usart
-	//Set the baud rate of the UART
-	debugUSARTInit(115200);
-	// printf uses a fair amount of memory to be included but makes serial printing much easier
-	printf("PutCharDebug is complete \n\r");
-
-	while(1)
-	{
-		//The get char debug function will return when a character is received
-		inchar = getCharDebug();
-		//Comment out this line once you have it working correctly
-		printf("This line will print when a character is received from the serial connection \n\r");
-
-		if (inchar == 'A')
-		{
-			//Switch which print statement is commented out when your ready for matlab data collection example
-			//matlab will buffer all characters until \n\r
-			printf("This will print if the character sent is an A \n\r");
-			//printf("%4d\t, %4d,\n\r", lowADC, highADC);
-		}
-	}
-}
-
