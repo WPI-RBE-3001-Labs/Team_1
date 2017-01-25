@@ -118,7 +118,7 @@ void Lab1loop(void){
 		compareCounter = F100HZ;
 	}
 
-/*
+
 	if(outputState == 0 && timerCount > (compareCounter *2.0 * (100.0 - dutyCycle))/100.0)
 	{
 		timerCount = 0;
@@ -134,17 +134,18 @@ void Lab1loop(void){
 		PORTA = 0;
 		outputState = 0;
 	}
-*/
+
 
 	if((ADCSRA & 0b00010000) && (ADCCount > F20HZ*4)) //if conversion is complete
 	{
 		int temp = ADCL;
-		temp |= ADCH << 8;
-		dutyCycle = temp;
+		int tempH = (ADCH <<8);
+		int totalTest = temp + tempH;
+		dutyCycle = totalTest;
 
-		printf("Current ADC Value: %f\n\r",dutyCycle);
+		printf("Current ADC Value: %i\n\r",temp);
 
-		dutyCycle = dutyCycle * 0.08 + 10;
+		dutyCycle = dutyCycle * 0.097;
 		if(dutyCycle < 10)
 		{
 			dutyCycle = 10;
