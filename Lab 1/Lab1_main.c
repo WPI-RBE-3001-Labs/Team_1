@@ -9,8 +9,10 @@
 int main(void){
 
 	initRBELib();
+	debugUSARTInit(115200);
 
 	while(1){
-
+		printf("It Works!\n");
+		_delay_ms(500);
 	}
 }

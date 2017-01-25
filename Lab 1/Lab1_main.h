@@ -9,8 +9,7 @@
 #define LAB_1_LAB1_MAIN_H_
 
 #include "RBELib/RBELib.h"
-#include "GlobalDefines.h"
-#include "RBELIB/USARTDebug.h"
+#include "RBELib/USARTDebug.h"
 
 #include "Lab1_ADCandWaveform.h"
 
