@@ -15,5 +15,7 @@
 #define F100HZ 75
 #define F20HZ 375
 #define F1HZ 7500
+void Lab1loop(void);
+void Lab1init(void);
 
 #endif /* LAB_1_LAB1_ADCANDWAVEFORM_H_ */

@@ -10,9 +10,9 @@ int main(void){
 
 	initRBELib();
 	debugUSARTInit(115200);
+	Lab1init();
 
 	while(1){
-		printf("It Works!\n");
-		_delay_ms(500);
+		Lab1loop();
 	}
 }
