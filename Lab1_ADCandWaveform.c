@@ -23,6 +23,7 @@ int highADC=1023;
 int tempValConversion = 69;
 int compareCounter = F100HZ;
 int outputState = 0;
+int ADCCount = 0;
 double dutyCycle = 50;
 volatile int timerCount = 0;
 /*
@@ -93,11 +94,11 @@ void Lab1init(void){
 			(0<<ADIF)|
 			(0<<ADIE)|
 			(1<<ADPS2)|
-			(1<<ADPS1)|
+			(1<<ADPS1)| //sets division factor to 128
 			(1<<ADPS0);
 	ADCSRB = 0b00000000;
-	DIDR0 = 0x40;
-	ADCSRA |= 0x40; //Starts conversion
+	DIDR0 =  0b10000000;
+	ADCSRA |= (1<<ADSC); //Starts conversion
 }
 
 void Lab1loop(void){
@@ -117,6 +118,7 @@ void Lab1loop(void){
 		compareCounter = F100HZ;
 	}
 
+/*
 	if(outputState == 0 && timerCount > (compareCounter *2.0 * (100.0 - dutyCycle))/100.0)
 	{
 		timerCount = 0;
@@ -132,12 +134,12 @@ void Lab1loop(void){
 		PORTA = 0;
 		outputState = 0;
 	}
+*/
 
-
-	if(timerCount > F100HZ) //if conversion is complete
+	if((ADCSRA & 0b00010000) && (ADCCount > F20HZ*4)) //if conversion is complete
 	{
-		int temp = ADCH;
-		//temp |= ADCH << 2;
+		int temp = ADCL;
+		temp |= ADCH << 8;
 		dutyCycle = temp;
 
 		printf("Current ADC Value: %f\n\r",dutyCycle);
@@ -153,12 +155,14 @@ void Lab1loop(void){
 		}
 
 
-		dutyCycle +=.001;
+		ADCCount = 0;
+		ADCSRA |= (1<<ADSC); //Starts conversion
 	}
 
 }
 
 ISR(TIMER0_COMPA_vect){
 	timerCount++;
+	ADCCount++;
 	TCNT0=0;
 }
