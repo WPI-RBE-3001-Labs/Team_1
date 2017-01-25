@@ -4,13 +4,19 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../USARTDebug.c 
+../Lab1_ADCandWaveform.c \
+../USARTDebug.c \
+../main.c 
 
 OBJS += \
-./USARTDebug.o 
+./Lab1_ADCandWaveform.o \
+./USARTDebug.o \
+./main.o 
 
 C_DEPS += \
-./USARTDebug.d 
+./Lab1_ADCandWaveform.d \
+./USARTDebug.d \
+./main.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
