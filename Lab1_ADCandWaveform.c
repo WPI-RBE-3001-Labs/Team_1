@@ -35,7 +35,7 @@ void sample()
 	//printf("Starting Sampling");
 
 	timerCount = 0;
-	while(numberOfSamples < 250)
+	while(numberOfSamples < WANTEDSAMPLES)
 	{
 		if(timerCount > F250HZ)
 		{
@@ -48,16 +48,19 @@ void sample()
 				samples[numberOfSamples] = totalTest;
 				numberOfSamples++;
 				timerCount=0;
-				PORTA = ~PORTA;
+				PORTC = ~PORTC;
 			}
 		}
 
 	}
 
 	//print samples here
-	for(int i = 0; i<250;i++)
+	for(int i = 0; i<WANTEDSAMPLES;i++)
 	{
-		printf("%i,%i\n\r", i,samples[i]);
+//		printf("%i,%i\n\r", i,samples[i]);
+		int voltage = (int) (((float) 5000) * ((float) samples[i]) / ((float) 1023));
+		int angle = (int) (((float) 270) * ((float) samples[i]) / ((float) 1023));
+		printf("%i,%i,%i,%i\n\r", i,samples[i],voltage, angle);
 	}
 	TCCR0B = 0b00000011;
 	timerCount=0;
@@ -69,15 +72,15 @@ void Lab1init(void){
 	//Timer Setup
 	TIMSK0 = 0b10; //Enable Interrupt
 	TCCR0A=0; //Pin setting and waveform gen setting
-	TCCR0B = 0b00000010; //sets clock to (clk/8)
+	TCCR0B = 0b00000011; //sets clock to (clk/8)
 	OCR0A = 18; //the compare register not supposed to be binary
 	sei();
 
 
 	DDRD = 0xFF;
 	PORTD = 0b00001111;
-	DDRA = 0xFF;
-	PORTA = 0b11111111;
+	DDRC = 0xFF;
+	PORTC = 0b11111111;
 
 	//Setup Switches
 
@@ -134,7 +137,7 @@ void Lab1loop(void){
 	{
 		timerCount = 0;
 		TCNT0=0;
-		PORTA = 0xFF;
+		PORTC = 0xFF;
 		outputState = 1;
 	}
 
@@ -142,7 +145,7 @@ void Lab1loop(void){
 	{
 		timerCount = 0;
 		TCNT0=0;
-		PORTA = 0;
+		PORTC = 0;
 		outputState = 0;
 	}
 
@@ -152,11 +155,11 @@ void Lab1loop(void){
 		int temp = ADCL;
 		int tempH = ADCH;
 		int totalTest = temp + (tempH<<8);
-		//dutyCycle = totalTest;
+		dutyCycle = totalTest;
 
-		printf("Current ADC Value: %d Low Val: %d High Val: %d\n\r",totalTest,temp,tempH);
 
-		/*
+
+
 		dutyCycle = dutyCycle * 0.097;
 		if(dutyCycle < 10)
 		{
@@ -165,9 +168,9 @@ void Lab1loop(void){
 		if(dutyCycle > 90)
 		{
 			dutyCycle = 90;
-		}*/
+		}
 
-
+		//printf("Current ADC Value: %d Low Val: %d High Val: %d\n\r",totalTest,temp,tempH);
 		ADCCount = 0;
 		ADCSRA |= (1<<ADSC); //Starts conversion
 	}
