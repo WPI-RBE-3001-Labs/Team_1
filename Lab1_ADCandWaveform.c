@@ -10,7 +10,7 @@
 //For use of abs()
 #include <stdlib.h>
 
-#define F250HZ 400
+#define F250HZ 370
 #define F100HZ 75
 #define F20HZ 375
 #define F1HZ 7500
@@ -21,20 +21,19 @@ char inchar;
 int lowADC = 0;
 int highADC=1023;
 int tempValConversion = 69;
-int compareCounter = F100HZ;
+int compareCounter = F250HZ;
 int outputState = 0;
 int ADCCount = 0;
 double dutyCycle = 50;
 volatile int timerCount = 0;
-/*
 
 void sample()
 {
 	int numberOfSamples = 0;
 	TCCR0B = 0b00000010;
-	int samples[250];
+	int samples[1000];
+	//printf("Starting Sampling");
 
-	_delay_ms(100);
 	timerCount = 0;
 	while(numberOfSamples < 250)
 	{
@@ -42,27 +41,35 @@ void sample()
 		{
 			if(ADCSRA & 0x10) //if conversion is complete
 			{
-				samples[numberOfSamples] = ADCH;
+				int temp = ADCL;
+				int tempH = ADCH;
+				ADCSRA |= (1<<ADSC); //Starts conversion
+				int totalTest = temp + (tempH<<8);
+				samples[numberOfSamples] = totalTest;
+				numberOfSamples++;
+				timerCount=0;
+				PORTA = ~PORTA;
 			}
 		}
+
 	}
 
 	//print samples here
 	for(int i = 0; i<250;i++)
 	{
-		//printf("Index is %i, Value is %i", i,samples[i]);
+		printf("%i,%i\n\r", i,samples[i]);
 	}
 	TCCR0B = 0b00000011;
 	timerCount=0;
 }
- */
+
 
 
 void Lab1init(void){
 	//Timer Setup
 	TIMSK0 = 0b10; //Enable Interrupt
 	TCCR0A=0; //Pin setting and waveform gen setting
-	TCCR0B = 0b00000011; //sets clock to (clk/8)
+	TCCR0B = 0b00000010; //sets clock to (clk/8)
 	OCR0A = 18; //the compare register not supposed to be binary
 	sei();
 
@@ -94,8 +101,8 @@ void Lab1init(void){
 			(0<<ADIF)|
 			(0<<ADIE)|
 			(1<<ADPS2)|
-			(1<<ADPS1)| //sets division factor to 128
-			(1<<ADPS0);
+			(1<<ADPS1)| //sets division factor to 64
+			(0<<ADPS0);
 	ADCSRB = 0b00000000;
 	DIDR0 =  0b10000000;
 	ADCSRA |= (1<<ADSC); //Starts conversion
@@ -118,6 +125,10 @@ void Lab1loop(void){
 		compareCounter = F100HZ;
 	}
 
+	if(~PINB & 0b1000) //if PORT B3 is low start sampling
+	{
+		sample();
+	}
 
 	if(outputState == 0 && timerCount > (compareCounter *2.0 * (100.0 - dutyCycle))/100.0)
 	{
@@ -139,12 +150,13 @@ void Lab1loop(void){
 	if((ADCSRA & 0b00010000) && (ADCCount > F20HZ*4)) //if conversion is complete
 	{
 		int temp = ADCL;
-		int tempH = (ADCH <<8);
-		int totalTest = temp + tempH;
-		dutyCycle = totalTest;
+		int tempH = ADCH;
+		int totalTest = temp + (tempH<<8);
+		//dutyCycle = totalTest;
 
-		printf("Current ADC Value: %i\n\r",temp);
+		printf("Current ADC Value: %d Low Val: %d High Val: %d\n\r",totalTest,temp,tempH);
 
+		/*
 		dutyCycle = dutyCycle * 0.097;
 		if(dutyCycle < 10)
 		{
@@ -153,7 +165,7 @@ void Lab1loop(void){
 		if(dutyCycle > 90)
 		{
 			dutyCycle = 90;
-		}
+		}*/
 
 
 		ADCCount = 0;
