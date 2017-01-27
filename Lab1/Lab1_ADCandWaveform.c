@@ -170,7 +170,7 @@ void Lab1loop(void){
 			dutyCycle = 90;
 		}
 
-		//printf("Current ADC Value: %d Low Val: %d High Val: %d\n\r",totalTest,temp,tempH);
+		printf("Current ADC Value: %d Current Duty Cycle: %f\n\r",totalTest,dutyCycle);
 		ADCCount = 0;
 		ADCSRA |= (1<<ADSC); //Starts conversion
 	}

@@ -1,4 +1,4 @@
-main.d main.o: ../main.c \
+Lab2A.d Lab2A.o: ../Lab2A.c \
   R:\RBE\ 3001\Workspace\ for\ Robot\RBELib\include/RBELib/RBELib.h \
   R:\RBE\ 3001\Workspace\ for\ Robot\RBELib\include/RBELib/ADC.h \
   R:\RBE\ 3001\Workspace\ for\ Robot\RBELib\include/RBELib/DAC.h \
@@ -13,9 +13,7 @@ main.d main.o: ../main.c \
   R:\RBE\ 3001\Workspace\ for\ Robot\RBELib\include/RBELib/ports.h \
   R:\RBE\ 3001\Workspace\ for\ Robot\RBELib\include/RBELib/SPI.h \
   R:\RBE\ 3001\Workspace\ for\ Robot\RBELib\include/RBELib/SetServo.h \
-  R:\RBE\ 3001\Workspace\ for\ Robot\RBELib\include/RBELib/SlaveSelects.h \
-  R:\RBE\ 3001\Workspace\ for\ Robot\RBELib\include/RBELib/USARTdebug.h \
-  ../Lab1/Lab1_ADCandWaveform.h ../Lab2A.c
+  R:\RBE\ 3001\Workspace\ for\ Robot\RBELib\include/RBELib/SlaveSelects.h
 
 R:\RBE\ 3001\Workspace\ for\ Robot\RBELib\include/RBELib/RBELib.h:
 
@@ -46,9 +44,3 @@ R:\RBE\ 3001\Workspace\ for\ Robot\RBELib\include/RBELib/SPI.h:
 R:\RBE\ 3001\Workspace\ for\ Robot\RBELib\include/RBELib/SetServo.h:
 
 R:\RBE\ 3001\Workspace\ for\ Robot\RBELib\include/RBELib/SlaveSelects.h:
-
-R:\RBE\ 3001\Workspace\ for\ Robot\RBELib\include/RBELib/USARTdebug.h:
-
-../Lab1/Lab1_ADCandWaveform.h:
-
-../Lab2A.c:
