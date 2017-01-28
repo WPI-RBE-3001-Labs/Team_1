@@ -51,7 +51,7 @@ all: RBE3001_Group.elf secondary-outputs
 RBE3001_Group.elf: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: AVR C Linker'
-	avr-gcc -Wl,-Map,RBE3001_Group.map -Wl,-u,vfprintf -lprintf_flt -lm -L"R:\RBE 3001\Workspace for Robot\RBELib\Release" -mmcu=atmega644p -o "RBE3001_Group.elf" $(OBJS) $(USER_OBJS) $(LIBS)
+	avr-gcc -Wl,-Map,RBE3001_Group.map -Wl,-u,vfprintf -lprintf_flt -lm -L"C:\Users\Mike\Documents\Robotics 3001\Workspace\RBELib\Release" -mmcu=atmega644p -o "RBE3001_Group.elf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
