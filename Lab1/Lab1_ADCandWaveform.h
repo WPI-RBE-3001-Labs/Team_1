@@ -12,7 +12,7 @@
 //For use of abs()
 #include <stdlib.h>
 
-#define WANTEDSAMPLES (2*250)
+#define WANTEDSAMPLES (1*250)
 
 
 void Lab1loop(void);

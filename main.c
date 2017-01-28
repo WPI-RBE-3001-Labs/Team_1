@@ -12,29 +12,29 @@
 //For use of abs()
 #include <stdlib.h>
 
-int main(void) //For Lab2A
-{
-	initRBELib();
-	debugUSARTInit(115200);
-	printf("\n\rMain.c\n\r");
-	Lab2AInit();
-	_delay_ms(500);
+//int mainLab2(void) //For Lab2A
+//{
+//	initRBELib();
+//	debugUSARTInit(115200);
+//	printf("\n\rMain.c\n\r");
+//	Lab2AInit();
+//	_delay_ms(500);
+//
+//
+//
+//	while(1){
+//		Lab2ALoop();
+//	}
+//	return 0;
+//}
 
-
-
-	while(1){
-		Lab2ALoop();
-	}
-	return 0;
-}
-
-int mainLab1(void)
+int main(void)
 {
 
 	initRBELib();
 	debugUSARTInit(115200);
 	Lab1init();
-	printf("\n\rMain.c");
+	//printf("\n\rMain.c\n\r");
 
 
 	while(1){

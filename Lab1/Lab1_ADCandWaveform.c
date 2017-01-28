@@ -26,6 +26,13 @@ int outputState = 0;
 int ADCCount = 0;
 double dutyCycle = 50;
 volatile int timerCount = 0;
+int freq = 0;
+int state = 0;
+int totalTest = 0;
+unsigned char freqSet = 0;
+unsigned char getChar = 1;
+char inchar;
+unsigned char printVal = 0;
 
 void sample()
 {
@@ -57,10 +64,9 @@ void sample()
 	//print samples here
 	for(int i = 0; i<WANTEDSAMPLES;i++)
 	{
-//		printf("%i,%i\n\r", i,samples[i]);
+
 		int voltage = (int) (((float) 5000) * ((float) samples[i]) / ((float) 1023));
-		int angle = (int) (((float) 270) * ((float) samples[i]) / ((float) 1023));
-		printf("%i,%i,%i,%i\n\r", i,samples[i],voltage, angle);
+		printf("%i,%i\n", i, voltage);
 	}
 	TCCR0B = 0b00000011;
 	timerCount=0;
@@ -116,64 +122,93 @@ void Lab1loop(void){
 	if(~PINB & 0b1) //if PORT B0 is low change frequency
 	{
 		compareCounter = F1HZ;
+		freq = 1;
+		//printf("Frequency set to 1 HZ\n\r");
+		freqSet = 1;
 	}
 
 	if(~PINB & 0b10) //if PORT B1 is low change frequency
 	{
 		compareCounter = F20HZ;
+		freq = 20;
+		//printf("Frequency set to 20 HZ\n\r");
+		freqSet = 1;
 	}
 
 	if(~PINB & 0b100) //if PORT B2 is low change frequency
 	{
 		compareCounter = F100HZ;
+		freq = 100;
+		//printf("Frequency set to 100 HZ\n\r");
+		freqSet = 1;
 	}
 
 	if(~PINB & 0b1000) //if PORT B3 is low start sampling
 	{
+
 		sample();
 	}
 
-	if(outputState == 0 && timerCount > (compareCounter *2.0 * (100.0 - dutyCycle))/100.0)
-	{
-		timerCount = 0;
-		TCNT0=0;
-		PORTC = 0xFF;
-		outputState = 1;
-	}
+	if(freqSet){
 
-	if(outputState == 1 && timerCount > (compareCounter *2.0 * dutyCycle)/100.0)
-	{
-		timerCount = 0;
-		TCNT0=0;
-		PORTC = 0;
-		outputState = 0;
-	}
-
-
-	if((ADCSRA & 0b00010000) && (ADCCount > F20HZ*4)) //if conversion is complete
-	{
-		int temp = ADCL;
-		int tempH = ADCH;
-		int totalTest = temp + (tempH<<8);
-		dutyCycle = totalTest;
-
-
-
-
-		dutyCycle = dutyCycle * 0.097;
-		if(dutyCycle < 10)
-		{
-			dutyCycle = 10;
+		if(getChar){
+			getChar = 0;
+			inchar = getCharDebug();
 		}
-		if(dutyCycle > 90)
-		{
-			dutyCycle = 90;
+		if(inchar == 's'){
+			printVal = 1;
 		}
 
-		printf("Current ADC Value: %d Current Duty Cycle: %f\n\r",totalTest,dutyCycle);
-		ADCCount = 0;
-		ADCSRA |= (1<<ADSC); //Starts conversion
+
+		if(outputState == 0 && timerCount > (compareCounter *2.0 * (100.0 - dutyCycle))/100.0)
+		{
+			timerCount = 0;
+			TCNT0=0;
+			PORTC = 0xFF;
+			state = 1;
+			outputState = 1;
+		}
+
+		if(outputState == 1 && timerCount > (compareCounter *2.0 * dutyCycle)/100.0)
+		{
+			timerCount = 0;
+			TCNT0=0;
+			PORTC = 0;
+			state = 0;
+			outputState = 0;
+		}
+
+
+		if((ADCSRA & 0b00010000) && (ADCCount > F20HZ*4)) //if conversion is complete
+		{
+			int temp = ADCL;
+			int tempH = ADCH;
+			totalTest = temp + (tempH<<8);
+			dutyCycle = totalTest;
+
+
+
+
+			dutyCycle = dutyCycle * 0.097;
+			if(dutyCycle < 10)
+			{
+				dutyCycle = 10;
+			}
+			if(dutyCycle > 90)
+			{
+				dutyCycle = 90;
+			}
+
+			//printf("Current ADC Value: %d Current Duty Cycle: %f\n\r",totalTest,dutyCycle);
+			ADCCount = 0;
+			ADCSRA |= (1<<ADSC); //Starts conversion
+		}
+
+		if(printVal){
+			printf("%.0f,%i,%i,%d\n\r", dutyCycle, freq, state, totalTest);
+		}
 	}
+
 
 }
 
