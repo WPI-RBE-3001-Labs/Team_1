@@ -14,7 +14,7 @@
  *@param speed a value between -1023 and 1023 represented how fast the motor shoud be moved
  *@param motor a value of either 0 (SHOULDER_MOTOR) or 1 (ELBOW_MOTOR)
  */
-void driveMotor(int speed,int motor)
+void driveMotor(int motor,int speed)
 {
 	if(speed>1023)
 	{

@@ -24,5 +24,4 @@ SUBDIRS := \
 Lab1 \
 . \
 Libraries \
-Lab2A \
 

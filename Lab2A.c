@@ -26,17 +26,22 @@ int lastPIDOutputElbow = 0;
 
 void Lab2AInit()
 {
-	//initADC(2);
+	initADC(2);
 	initSPI();
-	setDAC(0,600);
-	//TimerInit100Hz();
-	//DDRC = (1<<DDA0);
-	//PORTC = 0;
+	TimerInit100Hz();
+	DDRC = (1<<DDA0);
+	PORTC = 0;
 }
 
 void Lab2ALoop()
 {
-	setDAC(0,1023);
+	driveMotor(SHOULDER_MOTOR,1023);
+	//setDAC(1,0);
+	_delay_ms(2000);
+	//setDAC(1,1023);
+	driveMotor(SHOULDER_MOTOR,-1023);
+	_delay_ms(2000);
+
 
 }
 
