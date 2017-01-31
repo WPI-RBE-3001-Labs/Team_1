@@ -22,6 +22,7 @@ C_DEPS :=
 # Every subdirectory with source files must be described here
 SUBDIRS := \
 Lab1 \
-Lab2A \
 . \
+Libraries \
+Lab2A \
 

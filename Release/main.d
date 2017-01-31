@@ -15,7 +15,7 @@ main.o main.o: ../main.c \
   C:\Users\Mike\Documents\Robotics\ 3001\Workspace\RBELib\include/RBELib/SetServo.h \
   C:\Users\Mike\Documents\Robotics\ 3001\Workspace\RBELib\include/RBELib/SlaveSelects.h \
   C:\Users\Mike\Documents\Robotics\ 3001\Workspace\RBELib\include/RBELib/USARTdebug.h \
-  ../Lab1/Lab1_ADCandWaveform.h ../Lab2A/Lab2A.h
+  ../Lab1/Lab1_ADCandWaveform.h ../Lab2A.h
 
 C:\Users\Mike\Documents\Robotics\ 3001\Workspace\RBELib\include/RBELib/RBELib.h:
 
@@ -51,4 +51,4 @@ C:\Users\Mike\Documents\Robotics\ 3001\Workspace\RBELib\include/RBELib/USARTdebu
 
 ../Lab1/Lab1_ADCandWaveform.h:
 
-../Lab2A/Lab2A.h:
+../Lab2A.h:

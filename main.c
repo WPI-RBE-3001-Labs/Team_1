@@ -8,7 +8,7 @@
 #include "RBELib/RBELib.h"
 #include "RBELib/USARTdebug.h"
 #include "Lab1/Lab1_ADCandWaveform.h"
-#include "Lab2A/Lab2A.h"
+#include "Lab2A.h"
 //For use of abs()
 #include <stdlib.h>
 

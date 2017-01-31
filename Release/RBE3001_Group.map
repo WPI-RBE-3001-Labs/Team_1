@@ -7,21 +7,21 @@ C:\Users\Mike\Documents\Robotics 3001\Workspace\RBELib\Release\libRBELib.a(Debug
 C:\Users\Mike\Documents\Robotics 3001\Workspace\RBELib\Release\libRBELib.a(SetServo.o)
                               C:\Users\Mike\Documents\Robotics 3001\Workspace\RBELib\Release\libRBELib.a(Debug.o) (initAltCom)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libM.a(addsf3.o)
-                              ./Lab2A/Lab2A.o (__subsf3)
+                              ./Libraries/ADC.o (__subsf3)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libM.a(addsf3x.o)
                               c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libM.a(addsf3.o) (__addsf3x)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libM.a(cmpsf2.o)
                               ./Lab1/Lab1_ADCandWaveform.o (__ltsf2)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libM.a(divsf3.o)
-                              ./Lab2A/Lab2A.o (__divsf3)
+                              ./Libraries/ADC.o (__divsf3)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libM.a(divsf3x.o)
                               c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libM.a(divsf3.o) (__divsf3x)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libM.a(fixsfsi.o)
-                              ./Lab2A/Lab2A.o (__fixsfsi)
+                              ./Lab1/Lab1_ADCandWaveform.o (__fixsfsi)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libM.a(fixunssfsi.o)
                               c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libM.a(fixsfsi.o) (__fixunssfsi)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libM.a(floatsisf.o)
-                              ./Lab2A/Lab2A.o (__floatsisf)
+                              ./Libraries/ADC.o (__floatsisf)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libM.a(fp_cmp.o)
                               c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libM.a(cmpsf2.o) (__fp_cmp)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libM.a(fp_inf.o)
@@ -41,7 +41,7 @@ c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libM.a(fp_z
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libM.a(gesf2.o)
                               ./Lab1/Lab1_ADCandWaveform.o (__gtsf2)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libM.a(mulsf3.o)
-                              ./Lab2A/Lab2A.o (__mulsf3)
+                              ./Libraries/ADC.o (__mulsf3)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libM.a(mulsf3x.o)
                               c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libM.a(mulsf3.o) (__mulsf3x)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodsi4.o)
@@ -53,9 +53,9 @@ c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_epilogue.o)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
                               c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm644p.o (exit)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
-                              ./Lab2A/Lab2A.o (__do_copy_data)
+                              ./Libraries/DAC.o (__do_copy_data)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
-                              ./Lab2A/Lab2A.o (__do_clear_bss)
+                              ./Lab1/Lab1_ADCandWaveform.o (__do_clear_bss)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(ftoa_engine.o)
                               c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libprintf_flt.a(vfprintf_flt.o) (__ftoa_engine)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(strnlen_P.o)
@@ -67,7 +67,7 @@ c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(fput
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(iob.o)
                               C:\Users\Mike\Documents\Robotics 3001\Workspace\RBELib\Release\libRBELib.a(Debug.o) (__iob)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(printf.o)
-                              ./Lab2A/Lab2A.o (printf)
+                              ./Libraries/DAC.o (printf)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(sprintf.o)
                               C:\Users\Mike\Documents\Robotics 3001\Workspace\RBELib\Release\libRBELib.a(SetServo.o) (sprintf)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(ultoa_invert.o)
@@ -96,9 +96,13 @@ Address of section .data set to 0x800100
 LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm644p.o
 LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libprintf_flt.a
 LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libm.a
-LOAD ./Lab2A/Lab2A.o
+LOAD ./Libraries/ADC.o
+LOAD ./Libraries/DAC.o
+LOAD ./Libraries/SPI.o
+LOAD ./Libraries/USART.o
+LOAD ./Libraries/motors.o
 LOAD ./Lab1/Lab1_ADCandWaveform.o
-LOAD ./USART.o
+LOAD ./Lab2A.o
 LOAD ./main.o
 LOAD C:\Users\Mike\Documents\Robotics 3001\Workspace\RBELib\Release\libRBELib.a
 LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libM.a
@@ -285,9 +289,13 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
                 0x000001b8                __vector_18
                 0x000001b8                __vector_20
  .text          0x000001bc        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libprintf_flt.a(vfprintf_flt.o)
- .text          0x000001bc        0x0 ./Lab2A/Lab2A.o
+ .text          0x000001bc        0x0 ./Libraries/ADC.o
+ .text          0x000001bc        0x0 ./Libraries/DAC.o
+ .text          0x000001bc        0x0 ./Libraries/SPI.o
+ .text          0x000001bc        0x0 ./Libraries/USART.o
+ .text          0x000001bc        0x0 ./Libraries/motors.o
  .text          0x000001bc        0x0 ./Lab1/Lab1_ADCandWaveform.o
- .text          0x000001bc        0x0 ./USART.o
+ .text          0x000001bc        0x0 ./Lab2A.o
  .text          0x000001bc        0x0 ./main.o
  .text          0x000001bc        0x0 C:\Users\Mike\Documents\Robotics 3001\Workspace\RBELib\Release\libRBELib.a(Debug.o)
  .text          0x000001bc        0x0 C:\Users\Mike\Documents\Robotics 3001\Workspace\RBELib\Release\libRBELib.a(SetServo.o)
@@ -329,61 +337,61 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
  .text.avr-libc
                 0x000001bc      0x70e c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libprintf_flt.a(vfprintf_flt.o)
                 0x000001bc                vfprintf
- .text.TimerInit100Hz
-                0x000008ca       0x14 ./Lab2A/Lab2A.o
-                0x000008ca                TimerInit100Hz
- .text.__vector_16
-                0x000008de       0x28 ./Lab2A/Lab2A.o
-                0x000008de                __vector_16
- .text.initADC  0x00000906       0x20 ./Lab2A/Lab2A.o
-                0x00000906                initADC
- .text.getADC   0x00000926       0x2c ./Lab2A/Lab2A.o
-                0x00000926                getADC
- .text.updatePID
-                0x00000952      0x1ea ./Lab2A/Lab2A.o
-                0x00000952                updatePID
+ .text.initADC  0x000008ca       0x20 ./Libraries/ADC.o
+                0x000008ca                initADC
+ .text.getADC   0x000008ea       0x2c ./Libraries/ADC.o
+                0x000008ea                getADC
  .text.adcToDegreesArm1
-                0x00000b3c       0x36 ./Lab2A/Lab2A.o
-                0x00000b3c                adcToDegreesArm1
+                0x00000916       0x36 ./Libraries/ADC.o
+                0x00000916                adcToDegreesArm1
  .text.adcToVolts
-                0x00000b72       0x1e ./Lab2A/Lab2A.o
-                0x00000b72                adcToVolts
- .text.initSPI  0x00000b90       0x46 ./Lab2A/Lab2A.o
-                0x00000b90                initSPI
+                0x0000094c       0x1e ./Libraries/ADC.o
+                0x0000094c                adcToVolts
+ .text.setDAC   0x0000096a       0xdc ./Libraries/DAC.o
+                0x0000096a                setDAC
+ .text.initSPI  0x00000a46       0x46 ./Libraries/SPI.o
+                0x00000a46                initSPI
  .text.spiTransceive
-                0x00000bd6       0x38 ./Lab2A/Lab2A.o
-                0x00000bd6                spiTransceive
- .text.setDAC   0x00000c0e       0xdc ./Lab2A/Lab2A.o
-                0x00000c0e                setDAC
- .text.showTriangleWave
-                0x00000cea       0x96 ./Lab2A/Lab2A.o
-                0x00000cea                showTriangleWave
- .text.driveMotor
-                0x00000d80       0xec ./Lab2A/Lab2A.o
-                0x00000d80                driveMotor
- .text.Lab2ALoop
-                0x00000e6c        0xe ./Lab2A/Lab2A.o
-                0x00000e6c                Lab2ALoop
- .text.Lab2AInit
-                0x00000e7a       0x12 ./Lab2A/Lab2A.o
-                0x00000e7a                Lab2AInit
- .text.Lab1init
-                0x00000e8c       0x44 ./Lab1/Lab1_ADCandWaveform.o
-                0x00000e8c                Lab1init
- .text.sample   0x00000ed0      0x13e ./Lab1/Lab1_ADCandWaveform.o
-                0x00000ed0                sample
- .text.Lab1loop
-                0x0000100e      0x33e ./Lab1/Lab1_ADCandWaveform.o
-                0x0000100e                Lab1loop
+                0x00000a8c       0x38 ./Libraries/SPI.o
+                0x00000a8c                spiTransceive
  .text.debugUSARTInit
-                0x0000134c       0x20 ./USART.o
-                0x0000134c                debugUSARTInit
+                0x00000ac4       0x20 ./Libraries/USART.o
+                0x00000ac4                debugUSARTInit
  .text.putCharDebug
-                0x0000136c       0x10 ./USART.o
-                0x0000136c                putCharDebug
+                0x00000ae4       0x10 ./Libraries/USART.o
+                0x00000ae4                putCharDebug
  .text.getCharDebug
-                0x0000137c        0xe ./USART.o
-                0x0000137c                getCharDebug
+                0x00000af4        0xe ./Libraries/USART.o
+                0x00000af4                getCharDebug
+ .text.driveMotor
+                0x00000b02       0xec ./Libraries/motors.o
+                0x00000b02                driveMotor
+ .text.Lab1init
+                0x00000bee       0x44 ./Lab1/Lab1_ADCandWaveform.o
+                0x00000bee                Lab1init
+ .text.sample   0x00000c32      0x13e ./Lab1/Lab1_ADCandWaveform.o
+                0x00000c32                sample
+ .text.Lab1loop
+                0x00000d70      0x33e ./Lab1/Lab1_ADCandWaveform.o
+                0x00000d70                Lab1loop
+ .text.TimerInit100Hz
+                0x000010ae       0x14 ./Lab2A.o
+                0x000010ae                TimerInit100Hz
+ .text.__vector_16
+                0x000010c2       0x28 ./Lab2A.o
+                0x000010c2                __vector_16
+ .text.showTriangleWave
+                0x000010ea       0x96 ./Lab2A.o
+                0x000010ea                showTriangleWave
+ .text.Lab2ALoop
+                0x00001180        0xe ./Lab2A.o
+                0x00001180                Lab2ALoop
+ .text.updatePID
+                0x0000118e      0x1ea ./Lab2A.o
+                0x0000118e                updatePID
+ .text.Lab2AInit
+                0x00001378       0x12 ./Lab2A.o
+                0x00001378                Lab2AInit
  .text.main     0x0000138a       0x30 ./main.o
                 0x0000138a                main
  .text.initRBELib
@@ -534,9 +542,13 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
  *(.data)
  .data          0x00800100        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm644p.o
  .data          0x00800100        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libprintf_flt.a(vfprintf_flt.o)
- .data          0x00800100       0x3f ./Lab2A/Lab2A.o
+ .data          0x00800100        0x0 ./Libraries/ADC.o
+ .data          0x00800100       0x26 ./Libraries/DAC.o
+ .data          0x00800126       0x19 ./Libraries/SPI.o
+ .data          0x0080013f        0x0 ./Libraries/USART.o
+ .data          0x0080013f        0x0 ./Libraries/motors.o
  .data          0x0080013f       0x17 ./Lab1/Lab1_ADCandWaveform.o
- .data          0x00800156        0x0 ./USART.o
+ .data          0x00800156        0x0 ./Lab2A.o
  .data          0x00800156        0xb ./main.o
  .data          0x00800161        0x0 C:\Users\Mike\Documents\Robotics 3001\Workspace\RBELib\Release\libRBELib.a(Debug.o)
  .data          0x00800161       0x14 C:\Users\Mike\Documents\Robotics 3001\Workspace\RBELib\Release\libRBELib.a(SetServo.o)
@@ -574,11 +586,8 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
  .data          0x00800175        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(sprintf.o)
  .data          0x00800175        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(ultoa_invert.o)
  *(.data*)
- .data.DAC1Val  0x00800175        0x2 ./Lab2A/Lab2A.o
-                0x00800175                DAC1Val
- .data.direction
-                0x00800177        0x2 ./Lab2A/Lab2A.o
-                0x00800177                direction
+ .data.freqOSC  0x00800175        0x4 ./Libraries/USART.o
+                0x00800175                freqOSC
  .data.highADC  0x00800179        0x2 ./Lab1/Lab1_ADCandWaveform.o
                 0x00800179                highADC
  .data.tempValConversion
@@ -592,8 +601,11 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
                 0x0080017f                dutyCycle
  .data.getChar  0x00800183        0x1 ./Lab1/Lab1_ADCandWaveform.o
                 0x00800183                getChar
- .data.freqOSC  0x00800184        0x4 ./USART.o
-                0x00800184                freqOSC
+ .data.DAC1Val  0x00800184        0x2 ./Lab2A.o
+                0x00800184                DAC1Val
+ .data.direction
+                0x00800186        0x2 ./Lab2A.o
+                0x00800186                direction
  .data.RBEOut   0x00800188        0xe C:\Users\Mike\Documents\Robotics 3001\Workspace\RBELib\Release\libRBELib.a(Debug.o)
  *(.rodata)
  *(.rodata*)
@@ -607,9 +619,13 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
  *(.bss)
  .bss           0x00800196        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm644p.o
  .bss           0x00800196        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libprintf_flt.a(vfprintf_flt.o)
- .bss           0x00800196        0x0 ./Lab2A/Lab2A.o
+ .bss           0x00800196        0x0 ./Libraries/ADC.o
+ .bss           0x00800196        0x0 ./Libraries/DAC.o
+ .bss           0x00800196        0x0 ./Libraries/SPI.o
+ .bss           0x00800196        0x0 ./Libraries/USART.o
+ .bss           0x00800196        0x0 ./Libraries/motors.o
  .bss           0x00800196        0x0 ./Lab1/Lab1_ADCandWaveform.o
- .bss           0x00800196        0x0 ./USART.o
+ .bss           0x00800196        0x0 ./Lab2A.o
  .bss           0x00800196        0x0 ./main.o
  .bss           0x00800196        0x0 C:\Users\Mike\Documents\Robotics 3001\Workspace\RBELib\Release\libRBELib.a(Debug.o)
  .bss           0x00800196        0x0 C:\Users\Mike\Documents\Robotics 3001\Workspace\RBELib\Release\libRBELib.a(SetServo.o)
@@ -647,49 +663,49 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
  .bss           0x00800196        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(sprintf.o)
  .bss           0x00800196        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(ultoa_invert.o)
  *(.bss*)
- .bss.DAC0Val   0x00800196        0x2 ./Lab2A/Lab2A.o
-                0x00800196                DAC0Val
- .bss.hzFlag    0x00800198        0x2 ./Lab2A/Lab2A.o
-                0x00800198                hzFlag
- .bss.integrationSumShoulder
-                0x0080019a        0x4 ./Lab2A/Lab2A.o
-                0x0080019a                integrationSumShoulder
- .bss.integrationSumElbow
-                0x0080019e        0x4 ./Lab2A/Lab2A.o
-                0x0080019e                integrationSumElbow
- .bss.Kp        0x008001a2        0x4 ./Lab2A/Lab2A.o
-                0x008001a2                Kp
- .bss.Ki        0x008001a6        0x4 ./Lab2A/Lab2A.o
-                0x008001a6                Ki
- .bss.Kd        0x008001aa        0x4 ./Lab2A/Lab2A.o
-                0x008001aa                Kd
- .bss.lastPIDOutputShoulder
-                0x008001ae        0x2 ./Lab2A/Lab2A.o
-                0x008001ae                lastPIDOutputShoulder
- .bss.lastPIDOutputElbow
-                0x008001b0        0x2 ./Lab2A/Lab2A.o
-                0x008001b0                lastPIDOutputElbow
- .bss.lowADC    0x008001b2        0x2 ./Lab1/Lab1_ADCandWaveform.o
-                0x008001b2                lowADC
+ .bss.lowADC    0x00800196        0x2 ./Lab1/Lab1_ADCandWaveform.o
+                0x00800196                lowADC
  .bss.outputState
-                0x008001b4        0x2 ./Lab1/Lab1_ADCandWaveform.o
-                0x008001b4                outputState
- .bss.ADCCount  0x008001b6        0x2 ./Lab1/Lab1_ADCandWaveform.o
-                0x008001b6                ADCCount
+                0x00800198        0x2 ./Lab1/Lab1_ADCandWaveform.o
+                0x00800198                outputState
+ .bss.ADCCount  0x0080019a        0x2 ./Lab1/Lab1_ADCandWaveform.o
+                0x0080019a                ADCCount
  .bss.timerCount
-                0x008001b8        0x2 ./Lab1/Lab1_ADCandWaveform.o
-                0x008001b8                timerCount
- .bss.freq      0x008001ba        0x2 ./Lab1/Lab1_ADCandWaveform.o
-                0x008001ba                freq
- .bss.state     0x008001bc        0x2 ./Lab1/Lab1_ADCandWaveform.o
-                0x008001bc                state
+                0x0080019c        0x2 ./Lab1/Lab1_ADCandWaveform.o
+                0x0080019c                timerCount
+ .bss.freq      0x0080019e        0x2 ./Lab1/Lab1_ADCandWaveform.o
+                0x0080019e                freq
+ .bss.state     0x008001a0        0x2 ./Lab1/Lab1_ADCandWaveform.o
+                0x008001a0                state
  .bss.totalTest
-                0x008001be        0x2 ./Lab1/Lab1_ADCandWaveform.o
-                0x008001be                totalTest
- .bss.freqSet   0x008001c0        0x1 ./Lab1/Lab1_ADCandWaveform.o
-                0x008001c0                freqSet
- .bss.printVal  0x008001c1        0x1 ./Lab1/Lab1_ADCandWaveform.o
-                0x008001c1                printVal
+                0x008001a2        0x2 ./Lab1/Lab1_ADCandWaveform.o
+                0x008001a2                totalTest
+ .bss.freqSet   0x008001a4        0x1 ./Lab1/Lab1_ADCandWaveform.o
+                0x008001a4                freqSet
+ .bss.printVal  0x008001a5        0x1 ./Lab1/Lab1_ADCandWaveform.o
+                0x008001a5                printVal
+ .bss.DAC0Val   0x008001a6        0x2 ./Lab2A.o
+                0x008001a6                DAC0Val
+ .bss.hzFlag    0x008001a8        0x2 ./Lab2A.o
+                0x008001a8                hzFlag
+ .bss.integrationSumShoulder
+                0x008001aa        0x4 ./Lab2A.o
+                0x008001aa                integrationSumShoulder
+ .bss.integrationSumElbow
+                0x008001ae        0x4 ./Lab2A.o
+                0x008001ae                integrationSumElbow
+ .bss.Kp        0x008001b2        0x4 ./Lab2A.o
+                0x008001b2                Kp
+ .bss.Ki        0x008001b6        0x4 ./Lab2A.o
+                0x008001b6                Ki
+ .bss.Kd        0x008001ba        0x4 ./Lab2A.o
+                0x008001ba                Kd
+ .bss.lastPIDOutputShoulder
+                0x008001be        0x2 ./Lab2A.o
+                0x008001be                lastPIDOutputShoulder
+ .bss.lastPIDOutputElbow
+                0x008001c0        0x2 ./Lab2A.o
+                0x008001c0                lastPIDOutputElbow
  *(COMMON)
  COMMON         0x008001c2        0x1 ./Lab1/Lab1_ADCandWaveform.o
                 0x008001c2                inchar

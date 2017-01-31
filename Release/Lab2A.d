@@ -1,5 +1,4 @@
-USART.o USART.o: ../USART.c \
-  C:\Users\Mike\Documents\Robotics\ 3001\Workspace\RBELib\include/RBELib/USARTDebug.h \
+Lab2A.o Lab2A.o: ../Lab2A.c \
   C:\Users\Mike\Documents\Robotics\ 3001\Workspace\RBELib\include/RBELib/RBELib.h \
   C:\Users\Mike\Documents\Robotics\ 3001\Workspace\RBELib\include/RBELib/ADC.h \
   C:\Users\Mike\Documents\Robotics\ 3001\Workspace\RBELib\include/RBELib/DAC.h \
@@ -14,9 +13,8 @@ USART.o USART.o: ../USART.c \
   C:\Users\Mike\Documents\Robotics\ 3001\Workspace\RBELib\include/RBELib/ports.h \
   C:\Users\Mike\Documents\Robotics\ 3001\Workspace\RBELib\include/RBELib/SPI.h \
   C:\Users\Mike\Documents\Robotics\ 3001\Workspace\RBELib\include/RBELib/SetServo.h \
-  C:\Users\Mike\Documents\Robotics\ 3001\Workspace\RBELib\include/RBELib/SlaveSelects.h
-
-C:\Users\Mike\Documents\Robotics\ 3001\Workspace\RBELib\include/RBELib/USARTDebug.h:
+  C:\Users\Mike\Documents\Robotics\ 3001\Workspace\RBELib\include/RBELib/SlaveSelects.h \
+  ../Lab2A.h ../Libraries/motors.h
 
 C:\Users\Mike\Documents\Robotics\ 3001\Workspace\RBELib\include/RBELib/RBELib.h:
 
@@ -47,3 +45,7 @@ C:\Users\Mike\Documents\Robotics\ 3001\Workspace\RBELib\include/RBELib/SPI.h:
 C:\Users\Mike\Documents\Robotics\ 3001\Workspace\RBELib\include/RBELib/SetServo.h:
 
 C:\Users\Mike\Documents\Robotics\ 3001\Workspace\RBELib\include/RBELib/SlaveSelects.h:
+
+../Lab2A.h:
+
+../Libraries/motors.h:

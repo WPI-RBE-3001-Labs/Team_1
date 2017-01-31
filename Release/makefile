@@ -8,6 +8,7 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
+-include Libraries/subdir.mk
 -include Lab2A/subdir.mk
 -include Lab1/subdir.mk
 -include subdir.mk
