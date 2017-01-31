@@ -11,41 +11,162 @@
 #include <stdlib.h>
 #include "Lab2A.h"
 
-int DACVal = 0;
+int DAC0Val = 0;
+int DAC1Val = 1023;
 int direction =1;
+int hzFlag = 0;
+double integrationSumShoulder = 0;
+double integrationSumElbow = 0;
+double Kp = 0;
+double Ki = 0;
+double Kd = 0;
+int lastPIDOutputShoulder = 0;
+int lastPIDOutputElbow = 0;
 
 void Lab2AInit()
 {
 	initADC(2);
 	initSPI();
-	setDAC(0,600);
-	//printf("ADC Value,Output(voltage),Position(degrees)\n\r");
 }
 
 void Lab2ALoop()
 {
-
-	setDAC(0,DACVal);
-	//printf("DACVal: %i  %i\n\n\r",DACVal,direction);
-	_delay_ms(1000);
-	if(direction==1)
+	if(hzFlag ==1) //if 100Hz flag is high
 	{
-		DACVal += 100;
 
-		if(DACVal>1024)
-		{
-			direction =0;
-		}
-	}else{
-		DACVal-=100;
-		if(DACVal<0)
-		{
-			direction=1;
-		}
+		hzFlag = 0;
+	}
+}
+
+int updatePID(double desiredValue, int motor)
+{
+	int currentVal;
+	double error;
+
+	if(motor == SHOLDER_MOTOR)
+	{
+		currentVal = getADC(SHOLDER_MOTOR_ADC_CHANNEL);
+		error = desiredValue - currentVal;
+		integrationSumShoulder += error;
+		lastPIDOutputShoulder=Kp*error+Ki*integrationSumShoulder+Kd*lastPIDOutputShoulder;
+		return (int) lastPIDOutputShoulder;
 	}
 
+	if(motor == ELBOW_MOTOR)
+	{
+		currentVal = getADC(ELBOW_MOTOR_ADC_CHANNEL);
+		error = desiredValue - currentVal;
+		integrationSumElbow += error;
+		lastPIDOutputElbow=Kp*error+Ki*integrationSumElbow+Kd*lastPIDOutputElbow;
+		return (int) lastPIDOutputElbow;
+	}
+	return 0;
+}
 
 
+void TimerInit100Hz()
+{
+	//Timer Setup
+	TIMSK0= (0<<OCIE0B)|
+			(1<<OCIE0A)| //Enable compare A interrupt
+			(0<<TOIE0);
+
+	TCCR0A= (0<<COM0A1)|
+			(0<<COM0A0)|
+			(0<<COM0B1)|
+			(0<<COM0B0)|
+			(0<<WGM01)|
+			(0<<WGM00);
+
+	TCCR0B =(0<<FOC0A)|
+			(0<<FOC0B)|
+			(0<<WGM02)|
+			(1<<CS02)|
+			(0<<CS01)| //set clock divide to /1024
+			(1<<CS00);
+	OCR0A = 180; //the compare register not supposed to be binary
+	sei(); //enable global interupts
+}
+
+
+/**
+ *@brief Drives a motor based on a signed control signal between -1023 and 1023
+ *
+ *@param speed a value between -1023 and 1023 represented how fast the motor shoud be moved
+ *@param motor a value of either 0 (SHOLDER_MOTOR) or 1 (ELBOW_MOTOR)
+ */
+void driveMotor(int speed,int motor)
+{
+	if(speed>1023)
+	{
+		speed=1023;
+	}
+	if(speed<-1023)
+	{
+		speed=-1023;
+	}
+	if((speed>=0) & (motor == SHOLDER_MOTOR))
+	{
+		setDAC(0,speed);
+		setDAC(1,0);
+	}
+
+	if((speed<0) & (motor == SHOLDER_MOTOR))
+	{
+		setDAC(0,0);
+		setDAC(1,speed*-1);
+	}
+
+	if((speed>=0) & (motor == ELBOW_MOTOR))
+	{
+		setDAC(2,speed);
+		setDAC(3,0);
+	}
+
+	if((speed<0) & (motor == ELBOW_MOTOR))
+	{
+		setDAC(2,0);
+		setDAC(3,speed*-1);
+	}
+}
+
+/**
+ * @brief interrupt to fire 100Hz
+ */
+ISR(TIMER0_COMPA_vect)
+{
+	hzFlag = 1;
+}
+
+
+/**
+ *
+ * @brief display 2 triangle waves phase shifted 180 degrees Part 5
+ *
+ */
+void showTriangleWave()
+{
+	/*This is the code to display 2 triangle waves phase shifted 180 degrees Part 5*/
+		setDAC(0,DAC0Val);
+		setDAC(1,DAC1Val);
+		_delay_ms(10);
+		if(direction==1)
+		{
+			DAC0Val += 3;
+			DAC1Val -= 3;
+
+			if(DAC0Val>1024)
+			{
+				direction =0;
+			}
+		}else{
+			DAC0Val -= 3;
+			DAC1Val += 3;
+			if(DAC0Val<0)
+			{
+				direction=1;
+			}
+		}
 }
 
 void initADC(int channel)

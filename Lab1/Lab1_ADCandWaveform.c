@@ -211,9 +211,9 @@ void Lab1loop(void){
 
 
 }
-
+/*
 ISR(TIMER0_COMPA_vect){
 	timerCount++;
 	ADCCount++;
 	TCNT0=0;
-}
+}*/
