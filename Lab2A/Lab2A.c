@@ -25,17 +25,18 @@ int lastPIDOutputElbow = 0;
 
 void Lab2AInit()
 {
-	initADC(2);
+	//initADC(2);
 	initSPI();
+	setDAC(0,600);
+	//TimerInit100Hz();
+	//DDRC = (1<<DDA0);
+	//PORTC = 0;
 }
 
 void Lab2ALoop()
 {
-	if(hzFlag ==1) //if 100Hz flag is high
-	{
+	setDAC(0,1023);
 
-		hzFlag = 0;
-	}
 }
 
 int updatePID(double desiredValue, int motor)
@@ -43,7 +44,7 @@ int updatePID(double desiredValue, int motor)
 	int currentVal;
 	double error;
 
-	if(motor == SHOLDER_MOTOR)
+	if(motor == SHOULDER_MOTOR)
 	{
 		currentVal = getADC(SHOLDER_MOTOR_ADC_CHANNEL);
 		error = desiredValue - currentVal;
@@ -75,7 +76,7 @@ void TimerInit100Hz()
 			(0<<COM0A0)|
 			(0<<COM0B1)|
 			(0<<COM0B0)|
-			(0<<WGM01)|
+			(1<<WGM01)|
 			(0<<WGM00);
 
 	TCCR0B =(0<<FOC0A)|
@@ -84,7 +85,7 @@ void TimerInit100Hz()
 			(1<<CS02)|
 			(0<<CS01)| //set clock divide to /1024
 			(1<<CS00);
-	OCR0A = 180; //the compare register not supposed to be binary
+	OCR0A = 179; //the compare register not supposed to be binary
 	sei(); //enable global interupts
 }
 
@@ -93,7 +94,7 @@ void TimerInit100Hz()
  *@brief Drives a motor based on a signed control signal between -1023 and 1023
  *
  *@param speed a value between -1023 and 1023 represented how fast the motor shoud be moved
- *@param motor a value of either 0 (SHOLDER_MOTOR) or 1 (ELBOW_MOTOR)
+ *@param motor a value of either 0 (SHOULDER_MOTOR) or 1 (ELBOW_MOTOR)
  */
 void driveMotor(int speed,int motor)
 {
@@ -105,13 +106,13 @@ void driveMotor(int speed,int motor)
 	{
 		speed=-1023;
 	}
-	if((speed>=0) & (motor == SHOLDER_MOTOR))
+	if((speed>=0) & (motor == SHOULDER_MOTOR))
 	{
 		setDAC(0,speed);
 		setDAC(1,0);
 	}
 
-	if((speed<0) & (motor == SHOLDER_MOTOR))
+	if((speed<0) & (motor == SHOULDER_MOTOR))
 	{
 		setDAC(0,0);
 		setDAC(1,speed*-1);
@@ -260,8 +261,8 @@ void setDAC(int DACn, int SPIVal)
 	spiTransceive(comAddrByte);
 	spiTransceive(dataByteOne);//send first 8 data bits
 	spiTransceive(dataByteTwo);
-	//printf("SPIVal is %i\n\r", SPIVal);
-	//printf("0x%08X 0x%08X 0x%08X\n\r", comAddrByte, dataByteOne, dataByteTwo);
+	printf("SPIVal is %i\n\r", SPIVal);
+	printf("0x%08X 0x%08X 0x%08X\n\r", comAddrByte, dataByteOne, dataByteTwo);
 }
 
 void initSPI()
@@ -291,11 +292,10 @@ void initSPI()
 
 unsigned char spiTransceive(BYTE data)
 {
-	int recievedData=-1;
 	SPDR = data;
 	while(!((SPSR) & (1<<SPIF))); //Wait until data is done being sent
-	//printf("Data that was sent: %i\n\r",data);
-	recievedData = SPDR;
+	printf("Data that was sent: %i\n\r",data);
+	//recievedData = SPDR;
 	//printf("",recievedData);
-	return recievedData; //Return the data transmitted back by SPI device
+	return SPDR; //Return the data transmitted back by SPI device
 }

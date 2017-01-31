@@ -33,12 +33,12 @@ int main(void)
 
 	initRBELib();
 	debugUSARTInit(115200);
-	Lab1init();
-	//printf("\n\rMain.c\n\r");
+	Lab2AInit();
+	printf("\n\rMain.c\n\r");
 
 
 	while(1){
-		Lab1loop();
+		Lab2ALoop();
 	}
 	return 0;
 }
