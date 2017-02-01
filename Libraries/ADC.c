@@ -70,6 +70,10 @@ double degreesToADCArm1(short degrees)
 	return ((degrees + 45)*(ADCVERTARM1-ADCHORZARM1))/90;
 }
 
+double adcToDegreesArm2(short degrees)
+{
+	return (180.0/(ADCHORZPOSARM2-ADCHORZNEGARM2))*degrees - 143;
+}
 /**
  * @brief Convert ADC value to millivolts
  *

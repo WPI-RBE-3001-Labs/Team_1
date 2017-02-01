@@ -12,6 +12,7 @@
 #include "Lab2A.h"
 #include "Libraries/motors.h"
 #include "Libraries/ADC.h"
+#include "Libraries/kinematics.h"
 
 int DAC0Val = 0;
 int DAC1Val = 1023;
@@ -36,6 +37,9 @@ double currentVal;
 double oldVal = -999;
 double error;
 
+int x = 0;
+int y=10;
+
 
 void Lab2AInit()
 {
@@ -51,7 +55,7 @@ void Lab2AInit()
 void Lab2ALoop()
 {
 
-
+	/*
 	if(hzFlag == 1)
 	{
 		updatePID(desiredValue,SHOULDER_MOTOR);
@@ -65,7 +69,7 @@ void Lab2ALoop()
 		counter=0;
 		driveMotor(SHOULDER_MOTOR,lastPIDOutputShoulder);
 	}
-/*
+
 	if(~PINC & 0b1) //if PORT B0 is low change value
 	{
 		desiredValue = 0;
@@ -86,6 +90,10 @@ void Lab2ALoop()
 
 		desiredValue = 90;
 	}*/
+	degreesAAA = getADC(3);
+	printf("Desired Position: (%i,%i)  Theta1: %f  Theta2: %f\n\r",x,y,xyToTheta1(x,y),xyToTheta2(x,y));
+	//printf("Arm Angle, %f ADCValue: %f\n\r", adcToDegreesArm2(degreesAAA),degreesAAA);
+	_delay_ms(40);
 }
 
 int updatePID(double desiredValue, int motor)
