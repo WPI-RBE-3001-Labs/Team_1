@@ -65,6 +65,11 @@ double adcToDegreesArm1(short adcRead)
 	return (adcRead * 90.0 /(ADCVERTARM1-ADCHORZARM1))-45;
 }
 
+double degreesToADCArm1(short degrees)
+{
+	return ((degrees + 45)*(ADCVERTARM1-ADCHORZARM1))/90;
+}
+
 /**
  * @brief Convert ADC value to millivolts
  *

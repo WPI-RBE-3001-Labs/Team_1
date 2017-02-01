@@ -14,7 +14,7 @@ Lab2A.o Lab2A.o: ../Lab2A.c \
   C:\Users\Mike\Documents\Robotics\ 3001\Workspace\RBELib\include/RBELib/SPI.h \
   C:\Users\Mike\Documents\Robotics\ 3001\Workspace\RBELib\include/RBELib/SetServo.h \
   C:\Users\Mike\Documents\Robotics\ 3001\Workspace\RBELib\include/RBELib/SlaveSelects.h \
-  ../Lab2A.h ../Libraries/motors.h
+  ../Lab2A.h ../Libraries/motors.h ../Libraries/ADC.h
 
 C:\Users\Mike\Documents\Robotics\ 3001\Workspace\RBELib\include/RBELib/RBELib.h:
 
@@ -49,3 +49,5 @@ C:\Users\Mike\Documents\Robotics\ 3001\Workspace\RBELib\include/RBELib/SlaveSele
 ../Lab2A.h:
 
 ../Libraries/motors.h:
+
+../Libraries/ADC.h:

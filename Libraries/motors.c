@@ -16,26 +16,29 @@
  */
 void driveMotor(int motor,int speed)
 {
+	//printf("DriveMotor\n\r");
 	if(speed>1023)
 	{
-		speed=1023;
+		speed=1000;
 	}
 	if(speed<-1023)
 	{
-		speed=-1023;
+		speed=-1000;
 	}
-	if((speed>=0) & (motor == SHOULDER_MOTOR))
+	if((speed>=0) && (motor == SHOULDER_MOTOR))
 	{
 		setDAC(0,speed);
 		setDAC(1,0);
+		//printf("Forward\n\r");
 	}
 
-	if((speed<0) & (motor == SHOULDER_MOTOR))
+	if((speed<0) && (motor == SHOULDER_MOTOR))
 	{
 		setDAC(0,0);
 		setDAC(1,speed*-1);
+		//printf("Backward");
 	}
-
+	/*
 	if((speed>=0) & (motor == ELBOW_MOTOR))
 	{
 		setDAC(2,speed);
@@ -46,5 +49,5 @@ void driveMotor(int motor,int speed)
 	{
 		setDAC(2,0);
 		setDAC(3,speed*-1);
-	}
+	}*/
 }

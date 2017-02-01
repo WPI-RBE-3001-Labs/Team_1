@@ -35,7 +35,7 @@ unsigned char spiTransceive(BYTE data)
 {
 	SPDR = data;
 	while(!((SPSR) & (1<<SPIF))); //Wait until data is done being sent
-	printf("Data that was sent: %i\n\r",data);
+	//printf("Data that was sent: %i\n\r",data);
 	//recievedData = SPDR;
 	//printf("",recievedData);
 	return SPDR; //Return the data transmitted back by SPI device

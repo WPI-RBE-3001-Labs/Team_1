@@ -11,18 +11,30 @@
 #include <stdlib.h>
 #include "Lab2A.h"
 #include "Libraries/motors.h"
+#include "Libraries/ADC.h"
 
 int DAC0Val = 0;
 int DAC1Val = 1023;
 int direction =1;
-int hzFlag = 0;
+volatile int hzFlag = 0;
+volatile int counter=0;
 double integrationSumShoulder = 0;
 double integrationSumElbow = 0;
-double Kp = 0;
+double Kp = 20;
 double Ki = 0;
 double Kd = 0;
 int lastPIDOutputShoulder = 0;
 int lastPIDOutputElbow = 0;
+volatile unsigned int timer = 0;
+int DACValue = 1023;
+int ADCValue =0;
+volatile int counter2=0;
+double degreesAAA =0;
+
+double currentVal;
+double oldVal = -999;
+double error;
+
 
 void Lab2AInit()
 {
@@ -31,42 +43,69 @@ void Lab2AInit()
 	TimerInit100Hz();
 	DDRC = (1<<DDA0);
 	PORTC = 0;
+	//intiDAC();
+
 }
 
 void Lab2ALoop()
 {
-	driveMotor(SHOULDER_MOTOR,1023);
-	//setDAC(1,0);
-	_delay_ms(2000);
-	//setDAC(1,1023);
-	driveMotor(SHOULDER_MOTOR,-1023);
-	_delay_ms(2000);
 
 
+	if(hzFlag == 1)
+	{
+		if(counter2<1000)
+		{
+			updatePID(0,SHOULDER_MOTOR);
+		}
+		if(counter2>1000)
+		{
+			updatePID(90,SHOULDER_MOTOR);
+		}
+		if(counter2>2000)
+		{
+			counter2=0;
+		}
+		hzFlag=0;
+	}
+	//driveMotor(SHOULDER_MOTOR,DACValue*-1);
+	//showTriangleWave();
+
+	if(counter>5)
+	{
+		counter=0;
+		driveMotor(SHOULDER_MOTOR,lastPIDOutputShoulder);//lastPIDOutputShoulder);
+
+		printf("Last PID Output: %i Error:%f Current Val: %f Integration: %f\n\r", lastPIDOutputShoulder,error,currentVal,integrationSumShoulder);
+	}
 }
 
 int updatePID(double desiredValue, int motor)
 {
-	int currentVal;
-	double error;
-
 	if(motor == SHOULDER_MOTOR)
 	{
-		currentVal = getADC(SHOLDER_MOTOR_ADC_CHANNEL);
+		if(oldVal == -999){
+			oldVal = desiredValue;
+		}
+		if(oldVal != desiredValue){
+			oldVal = desiredValue;
+			integrationSumShoulder = 0;
+		}
+		currentVal = adcToDegreesArm1(getADC(SHOULDER_MOTOR_ADC_CHANNEL));
 		error = desiredValue - currentVal;
-		integrationSumShoulder += error;
-		lastPIDOutputShoulder=Kp*error+Ki*integrationSumShoulder+Kd*lastPIDOutputShoulder;
+		integrationSumShoulder += error/10.0;
+		lastPIDOutputShoulder=Kp*error+Ki*integrationSumShoulder;//+Kd*(lastPIDOutputShoulder-currentVal);
 		return (int) lastPIDOutputShoulder;
 	}
-
+/*
 	if(motor == ELBOW_MOTOR)
 	{
 		currentVal = getADC(ELBOW_MOTOR_ADC_CHANNEL);
 		error = desiredValue - currentVal;
 		integrationSumElbow += error;
-		lastPIDOutputElbow=Kp*error+Ki*integrationSumElbow+Kd*lastPIDOutputElbow;
+		lastPIDOutputElbow=Kp;//*error+Ki*integrationSumElbow+Kd*(lastPIDOutputShoulder-currentVal);
 		return (int) lastPIDOutputElbow;
 	}
+*/
 	return 0;
 }
 
@@ -103,6 +142,8 @@ void TimerInit100Hz()
 ISR(TIMER0_COMPA_vect)
 {
 	hzFlag = 1;
+	counter++;
+	counter2++;
 }
 
 
