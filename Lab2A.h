@@ -12,8 +12,7 @@ void Lab2AInit(void);
 void Lab2ALoop(void);
 void initADC(int channel);
 unsigned short getADC(int channel);
-double adcToDegreesArm1(short adcRead);
-double adcToVolts(short adcRead);
+
 void showTriangleWave(void);
 void TimerInit100Hz(void);
 void driveMotor(int speed,int motor);

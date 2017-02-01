@@ -78,5 +78,13 @@ double degreesToADCArm1(short degrees)
  */
 double adcToVolts(short adcRead)
 {
+	if(adcRead<0)
+	{
+		adcRead *= -1;
+	}
 	return adcRead*4.78; //map 0->1023 to 0-5000
+}
+int ADCtoMillamps(int adcRead){
+	float ratio = 4.3096;
+	return (int) (adcRead-536.53)*ratio;
 }

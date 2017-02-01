@@ -50,3 +50,12 @@ void intiDAC()
 	//printf("SPIVal is %i\n\r", SPIVal);
 	//printf("0x%08X 0x%08X 0x%08X\n\r", comAddrByte, dataByteOne, dataByteTwo);
 }
+
+double dacToVolts(short adcRead)
+{
+	if(adcRead<0)
+	{
+		adcRead *= -1;
+	}
+	return adcRead*2.39; //map 0->1023 to 0-2500
+}

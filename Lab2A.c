@@ -28,6 +28,7 @@ int lastPIDOutputElbow = 0;
 volatile unsigned int timer = 0;
 int DACValue = 1023;
 int ADCValue =0;
+int desiredValue =0;
 volatile int counter2=0;
 double degreesAAA =0;
 
@@ -53,19 +54,8 @@ void Lab2ALoop()
 
 	if(hzFlag == 1)
 	{
-		if(counter2<1000)
-		{
-			updatePID(0,SHOULDER_MOTOR);
-		}
-		if(counter2>1000)
-		{
-			updatePID(90,SHOULDER_MOTOR);
-		}
-		if(counter2>2000)
-		{
-			counter2=0;
-		}
-		hzFlag=0;
+		updatePID(desiredValue,SHOULDER_MOTOR);
+		printf("command position, %i, Arm Angle, %f, Motor Control Output, %f, Current Sense, %i\n\r", desiredValue,currentVal,adcToVolts(lastPIDOutputShoulder),ADCtoMillamps(getADC(0)));
 	}
 	//driveMotor(SHOULDER_MOTOR,DACValue*-1);
 	//showTriangleWave();
@@ -73,10 +63,29 @@ void Lab2ALoop()
 	if(counter>5)
 	{
 		counter=0;
-		driveMotor(SHOULDER_MOTOR,lastPIDOutputShoulder);//lastPIDOutputShoulder);
-
-		printf("Last PID Output: %i Error:%f Current Val: %f Integration: %f\n\r", lastPIDOutputShoulder,error,currentVal,integrationSumShoulder);
+		driveMotor(SHOULDER_MOTOR,lastPIDOutputShoulder);
 	}
+/*
+	if(~PINC & 0b1) //if PORT B0 is low change value
+	{
+		desiredValue = 0;
+	}
+
+	if(~PINC & 0b10) //if PORT B1 is low change value
+	{
+		desiredValue = 30;
+	}
+
+	if(~PINC & 0b100) //if PORT B2 is low change value
+	{
+		desiredValue = 60;
+	}
+
+	if(~PINC & 0b1000) //if PORT B3 is low start value
+	{
+
+		desiredValue = 90;
+	}*/
 }
 
 int updatePID(double desiredValue, int motor)
