@@ -60,9 +60,9 @@ unsigned short getADC(int channel)
 	}
 }
 
-double adcToDegreesArm1(short adcRead)
+int adcToDegreesArm1(short adcRead)
 {
-	return (adcRead * 90.0 /(ADCVERTARM1-ADCHORZARM1))-45;
+	return (int) (adcRead * 90.0 /(ADCVERTARM1-ADCHORZARM1))-45;
 }
 
 double degreesToADCArm1(short degrees)
@@ -76,13 +76,13 @@ double degreesToADCArm1(short degrees)
  * @param adcRead The ADC reading given as a range between 0-1023
  *
  */
-double adcToVolts(short adcRead)
+int adcToVolts(int adcRead)
 {
 	if(adcRead<0)
 	{
 		adcRead *= -1;
 	}
-	return adcRead*4.78; //map 0->1023 to 0-5000
+	return adcRead*239/50; //map 0->1023 to 0-5000
 }
 int ADCtoMillamps(int adcRead){
 	float ratio = 4.3096;

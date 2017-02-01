@@ -18,23 +18,28 @@ int DAC1Val = 1023;
 int direction =1;
 volatile int hzFlag = 0;
 volatile int counter=0;
-double integrationSumShoulder = 0;
+int integrationSumShoulder = 0;
 double integrationSumElbow = 0;
-double Kp = 20;
-double Ki = 0;
-double Kd = 0;
+double Kp = 75;
+double Ki = 0.01;
+double Kd = 16;
+int lastPosShoulder = 0;
+int lastPosElbow = 0;
 int lastPIDOutputShoulder = 0;
 int lastPIDOutputElbow = 0;
 volatile unsigned int timer = 0;
 int DACValue = 1023;
 int ADCValue =0;
-int desiredValue =0;
+
 volatile int counter2=0;
 double degreesAAA =0;
 
-double currentVal;
-double oldVal = -999;
-double error;
+int currentVal;
+int oldVal = -999;
+int error;
+int diffErr;
+
+int desiredValue = 0;
 
 
 void Lab2AInit()
@@ -43,7 +48,9 @@ void Lab2AInit()
 	initSPI();
 	TimerInit100Hz();
 	DDRC = (1<<DDA0);
+	DDRC = (0<<DDC4|0<<DDC5|0<<DDC6|0<<DDC7);
 	PORTC = 0;
+
 	//intiDAC();
 
 }
@@ -55,40 +62,43 @@ void Lab2ALoop()
 	if(hzFlag == 1)
 	{
 		updatePID(desiredValue,SHOULDER_MOTOR);
-		printf("command position, %i, Arm Angle, %f, Motor Control Output, %f, Current Sense, %i\n\r", desiredValue,currentVal,adcToVolts(lastPIDOutputShoulder),ADCtoMillamps(getADC(0)));
+		printf("%i,%i,%i,%i\n", desiredValue,currentVal,lastPIDOutputShoulder,ADCtoMillamps(getADC(0)));
 	}
-	//driveMotor(SHOULDER_MOTOR,DACValue*-1);
-	//showTriangleWave();
+
+
 
 	if(counter>5)
 	{
 		counter=0;
 		driveMotor(SHOULDER_MOTOR,lastPIDOutputShoulder);
 	}
-/*
-	if(~PINC & 0b1) //if PORT B0 is low change value
+
+
+
+	if(~PINC & 0b10000) //if PORT B0 is low change value
 	{
 		desiredValue = 0;
+
 	}
 
-	if(~PINC & 0b10) //if PORT B1 is low change value
+	if(~PINC & 0b100000) //if PORT B1 is low change value
 	{
 		desiredValue = 30;
 	}
 
-	if(~PINC & 0b100) //if PORT B2 is low change value
+	if(~PINC & 0b1000000) //if PORT B2 is low change value
 	{
 		desiredValue = 60;
 	}
 
-	if(~PINC & 0b1000) //if PORT B3 is low start value
+	if(~PINC & 0b10000000) //if PORT B3 is low start value
 	{
 
 		desiredValue = 90;
-	}*/
+	}
 }
 
-int updatePID(double desiredValue, int motor)
+int updatePID(int desiredValue, int motor)
 {
 	if(motor == SHOULDER_MOTOR)
 	{
@@ -101,8 +111,14 @@ int updatePID(double desiredValue, int motor)
 		}
 		currentVal = adcToDegreesArm1(getADC(SHOULDER_MOTOR_ADC_CHANNEL));
 		error = desiredValue - currentVal;
-		integrationSumShoulder += error/10.0;
-		lastPIDOutputShoulder=Kp*error+Ki*integrationSumShoulder;//+Kd*(lastPIDOutputShoulder-currentVal);
+		integrationSumShoulder += (error/10);
+		diffErr = lastPosShoulder-currentVal;
+		if(error < 5 && error > -5) error = 0;
+		lastPIDOutputShoulder= (int) Kp*error + Ki*integrationSumShoulder + Kd*diffErr;
+
+
+		//printf("Err %i, INT %i, DER %i, OUT %i\n\r",error,integrationSumShoulder,diffErr,(int)lastPIDOutputShoulder );
+		lastPosShoulder = currentVal;
 		return (int) lastPIDOutputShoulder;
 	}
 /*

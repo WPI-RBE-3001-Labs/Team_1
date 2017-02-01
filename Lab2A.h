@@ -16,7 +16,7 @@ unsigned short getADC(int channel);
 void showTriangleWave(void);
 void TimerInit100Hz(void);
 void driveMotor(int speed,int motor);
-int updatePID(double desiredValue, int motor);
+int updatePID(int desiredValue, int motor);
 
 
 #endif /* LAB2A_H_ */

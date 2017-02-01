@@ -10,10 +10,10 @@
 
 double degreesToADCArm1(short degrees);
 int ADCtoMillamps(int adcRead);
-double adcToDegreesArm1(short adcRead);
-double adcToVolts(short adcRead);
+int adcToDegreesArm1(short adcRead);
+int adcToVolts(int adcRead);
 
 #define ADCVERTARM1 640 //ADC value from shoulder pot when are is vertical
-#define ADCHORZARM1	224 //ADC value from shoulder pot when are is horizontal
+#define ADCHORZARM1	200 //ADC value from shoulder pot when are is horizontal
 
 #endif /* LIBRARIES_ADC_H_ */
