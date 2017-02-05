@@ -60,7 +60,7 @@ unsigned short getADC(int channel)
 	}
 }
 
-int adcToDegreesArm1(short adcRead)
+double adcToDegreesArm1(short adcRead)
 {
 	return (int) (adcRead * 90.0 /(ADCVERTARM1-ADCHORZARM1))-45;
 }

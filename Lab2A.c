@@ -77,13 +77,10 @@ void Lab2ALoop()
 		driveMotor(SHOULDER_MOTOR,lastPIDOutputShoulder);
 	}
 
-<<<<<<< HEAD
 	if(~PINC & 0b1) //if PORT B0 is low change value
-=======
-
+{}
 
 	if(~PINC & 0b10000) //if PORT B0 is low change value
->>>>>>> branch 'master' of https://github.com/WPI-RBE-3001-Labs/Team_1.git
 	{
 		desiredValue = 0;
 
@@ -103,16 +100,14 @@ void Lab2ALoop()
 	{
 
 		desiredValue = 90;
-<<<<<<< HEAD
 	}*/
 	degreesAAA = getADC(3);
 	printf("Desired Position: (%i,%i)  Theta1: %f  Theta2: %f\n\r",x,y,xyToTheta1(x,y),xyToTheta2(x,y));
 	//printf("Arm Angle, %f ADCValue: %f\n\r", adcToDegreesArm2(degreesAAA),degreesAAA);
 	_delay_ms(40);
-=======
-	}
->>>>>>> branch 'master' of https://github.com/WPI-RBE-3001-Labs/Team_1.git
+
 }
+
 
 int updatePID(int desiredValue, int motor)
 {
@@ -143,7 +138,7 @@ int updatePID(int desiredValue, int motor)
 		currentVal = getADC(ELBOW_MOTOR_ADC_CHANNEL);
 		error = desiredValue - currentVal;
 		integrationSumElbow += error;
-		lastPIDOutputElbow=Kp;//*error+Ki*integrationSumElbow+Kd*(lastPIDOutputShoulder-currentVal);
+		lastPIDOutputElbow=Kp;// *error+Ki*integrationSumElbow+Kd*(lastPIDOutputShoulder-currentVal);
 		return (int) lastPIDOutputElbow;
 	}
 */
