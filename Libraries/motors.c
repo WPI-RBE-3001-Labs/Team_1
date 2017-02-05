@@ -19,11 +19,14 @@ void driveMotor(int motor,int speed)
 	//printf("DriveMotor\n\r");
 	if(speed>1023)
 	{
-		speed=1000;
+		speed=1023;
 	}
 	if(speed<-1023)
 	{
-		speed=-1000;
+		speed=-1023;
+	}
+	if(speed > -30 && speed < 30){
+		speed=0;
 	}
 	if((speed>=0) && (motor == SHOULDER_MOTOR))
 	{
