@@ -19,11 +19,19 @@ int DAC1Val = 1023;
 int direction =1;
 volatile int hzFlag = 0;
 volatile int counter=0;
+
+//PID Vaiables
 int integrationSumShoulder = 0;
 double integrationSumElbow = 0;
-double Kp = 75;
-double Ki = 0.01;
-double Kd = 16;
+
+double KpShoulder = 75;
+double KiShoulder = 0.01;
+double KdShoulder = 16;
+
+double KpElbow = 10;
+double KiElbow = 0.01;
+double KdElbow = 0;
+
 int lastPosShoulder = 0;
 int lastPosElbow = 0;
 int lastPIDOutputShoulder = 0;
@@ -36,7 +44,8 @@ volatile int counter2=0;
 double degreesAAA =0;
 
 int currentVal;
-int oldVal = -999;
+int oldValShoulder = -999;
+int oldValElbow = -999;
 int error;
 int diffErr;
 
@@ -44,6 +53,8 @@ int desiredValue = 0;
 
 int x = 0;
 int y=10;
+double desiredValueShoulder;
+double desiredValueElbow;
 
 
 void Lab2AInit()
@@ -55,6 +66,10 @@ void Lab2AInit()
 	DDRC = (0<<DDC4|0<<DDC5|0<<DDC6|0<<DDC7);
 	PORTC = 0;
 
+	printf("Desired Position: (%i,%i)  Theta1: %f  Theta2: %f\n\r",x,y,xyToTheta1(x,y,signTheta2(x,y)*xyToTheta2(x,y)),signTheta2(x,y)*xyToTheta2(x,y));
+	desiredValueShoulder = xyToTheta1(x,y,signTheta2(x,y)*xyToTheta2(x,y));
+	desiredValueElbow = signTheta2(x,y)*xyToTheta2(x,y);
+
 	//intiDAC();
 
 }
@@ -62,11 +77,12 @@ void Lab2AInit()
 void Lab2ALoop()
 {
 
-	/*
+
 	if(hzFlag == 1)
 	{
-		updatePID(desiredValue,SHOULDER_MOTOR);
-		printf("%i,%i,%i,%i\n", desiredValue,currentVal,lastPIDOutputShoulder,ADCtoMillamps(getADC(0)));
+		updatePID(desiredValueShoulder,SHOULDER_MOTOR);
+		updatePID(desiredValueElbow,ELBOW_MOTOR);
+		//printf("Desired Value Elbow, %f, Current Value,%i,Shoulder PID%i,%i\n\r", desiredValueElbow,currentVal,lastPIDOutputElbow,ADCtoMillamps(getADC(0)));
 	}
 
 
@@ -75,10 +91,13 @@ void Lab2ALoop()
 	{
 		counter=0;
 		driveMotor(SHOULDER_MOTOR,lastPIDOutputShoulder);
-	}
+		driveMotor(ELBOW_MOTOR,-1*lastPIDOutputElbow);
+		printf("Desired Value Shoulder: %f, Current Value: %i,Shoulder PID: %i,%i\n\r", desiredValueShoulder,currentVal,lastPIDOutputElbow,ADCtoMillamps(getADC(0)));
 
+	}
+	/*
 	if(~PINC & 0b1) //if PORT B0 is low change value
-{}
+	{}
 
 	if(~PINC & 0b10000) //if PORT B0 is low change value
 	{
@@ -101,10 +120,10 @@ void Lab2ALoop()
 
 		desiredValue = 90;
 	}*/
-	degreesAAA = getADC(3);
-	printf("Desired Position: (%i,%i)  Theta1: %f  Theta2: %f\n\r",x,y,xyToTheta1(x,y),xyToTheta2(x,y));
+	//degreesAAA = getADC(3);
+	//printf("Desired Position: (%i,%i)  Theta1: %f  Theta2: %f\n\r",x,y,xyToTheta1(x,y,signTheta2(x,y)*xyToTheta2(x,y)),signTheta2(x,y)*xyToTheta2(x,y));
 	//printf("Arm Angle, %f ADCValue: %f\n\r", adcToDegreesArm2(degreesAAA),degreesAAA);
-	_delay_ms(40);
+	//_delay_ms(400);
 
 }
 
@@ -113,11 +132,11 @@ int updatePID(int desiredValue, int motor)
 {
 	if(motor == SHOULDER_MOTOR)
 	{
-		if(oldVal == -999){
-			oldVal = desiredValue;
+		if(oldValShoulder == -999){
+			oldValShoulder = desiredValue;
 		}
-		if(oldVal != desiredValue){
-			oldVal = desiredValue;
+		if(oldValShoulder != desiredValue){
+			oldValShoulder = desiredValue;
 			integrationSumShoulder = 0;
 		}
 		currentVal = adcToDegreesArm1(getADC(SHOULDER_MOTOR_ADC_CHANNEL));
@@ -125,13 +144,34 @@ int updatePID(int desiredValue, int motor)
 		integrationSumShoulder += (error/10);
 		diffErr = lastPosShoulder-currentVal;
 		if(error < 5 && error > -5) error = 0;
-		lastPIDOutputShoulder= (int) Kp*error + Ki*integrationSumShoulder + Kd*diffErr;
+		lastPIDOutputShoulder= (int) KpShoulder*error + KiShoulder*integrationSumShoulder + KdShoulder*diffErr;
 
 
 		//printf("Err %i, INT %i, DER %i, OUT %i\n\r",error,integrationSumShoulder,diffErr,(int)lastPIDOutputShoulder );
 		lastPosShoulder = currentVal;
 		return (int) lastPIDOutputShoulder;
 	}
+	if(motor == ELBOW_MOTOR)
+		{
+			if(oldValElbow == -999){
+				oldValElbow = desiredValue;
+			}
+			if(oldValElbow != desiredValue){
+				oldValElbow = desiredValue;
+				integrationSumElbow = 0;
+			}
+			currentVal = adcToDegreesArm2(getADC(ELBOW_MOTOR_ADC_CHANNEL));
+			error = desiredValue - currentVal;
+			integrationSumElbow += (error/10);
+			diffErr = lastPosElbow-currentVal;
+			if(error < 5 && error > -5) error = 0;
+			lastPIDOutputElbow= (int) KpElbow*error + KiElbow*integrationSumElbow + KdElbow*diffErr;
+
+
+			//printf("Err %i, INT %i, DER %i, OUT %i\n\r",error,integrationSumShoulder,diffErr,(int)lastPIDOutputShoulder );
+			lastPosShoulder = currentVal;
+			return (int) lastPIDOutputElbow;
+		}
 /*
 	if(motor == ELBOW_MOTOR)
 	{

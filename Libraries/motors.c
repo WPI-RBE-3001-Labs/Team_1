@@ -41,7 +41,7 @@ void driveMotor(int motor,int speed)
 		setDAC(1,speed*-1);
 		//printf("Backward");
 	}
-	/*
+
 	if((speed>=0) & (motor == ELBOW_MOTOR))
 	{
 		setDAC(2,speed);
@@ -52,5 +52,5 @@ void driveMotor(int motor,int speed)
 	{
 		setDAC(2,0);
 		setDAC(3,speed*-1);
-	}*/
+	}
 }

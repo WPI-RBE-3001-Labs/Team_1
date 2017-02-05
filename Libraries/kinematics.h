@@ -11,7 +11,8 @@
 #define LENGTH1 6
 #define LENGTH2 4
 
-double xyToTheta1(double x, double y);
+double xyToTheta1(double x, double y,double theata2);
 double xyToTheta2(double x, double y);
+int signTheta2(double x,double y);
 
 #endif /* LIBRARIES_KINEMATICS_H_ */
