@@ -39,3 +39,19 @@ double xyToTheta2(double x, double y)
 	double output = acos((x*x+y*y-LENGTH1*LENGTH1-LENGTH2*LENGTH2)/(2*LENGTH1*LENGTH2))*(180/3.1415);
 	return output;
 }
+
+double getX(double theta1, double theta2){
+	theta1 = theta1 * 3.14 / 180;
+	theta2 = theta2 * 3.14 / 180;
+	double x1 = LENGTH1 * cos(theta1);
+	double x2 = x1 + LENGTH2 * cos(theta1 + theta2);
+	return x2;
+}
+double getY(double theta1, double theta2){
+	theta1 = theta1 * 3.14 / 180;
+	theta2 = theta2 * 3.14 / 180;
+	double y1 = LENGTH1 * sin(theta1);
+	double y2 = y1 + LENGTH2 * sin(theta1 + theta2);
+	return y2;
+}
+
