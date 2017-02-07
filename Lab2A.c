@@ -24,9 +24,9 @@ volatile int counter=0;
 int integrationSumShoulder = 0;
 double integrationSumElbow = 0;
 
-double KpShoulder = 75;
+double KpShoulder = 35;
 double KiShoulder = 0.01;
-double KdShoulder = 16;
+double KdShoulder = 0;
 
 double KpElbow = 10;
 double KiElbow = 0.01;
