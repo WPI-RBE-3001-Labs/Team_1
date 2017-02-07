@@ -78,24 +78,25 @@ void Lab2ALoop()
 {
 
 
-	if(hzFlag == 1)
-	{
-		updatePID(desiredValueShoulder,SHOULDER_MOTOR);
-		updatePID(desiredValueElbow,ELBOW_MOTOR);
-		//printf("Desired Value Elbow, %f, Current Value,%i,Shoulder PID%i,%i\n\r", desiredValueElbow,currentVal,lastPIDOutputElbow,ADCtoMillamps(getADC(0)));
-	}
+//	if(hzFlag == 1)
+//	{
+//		updatePID(desiredValueShoulder,SHOULDER_MOTOR);
+//		updatePID(desiredValueElbow,ELBOW_MOTOR);
+//		//printf("Desired Value Elbow, %f, Current Value,%i,Shoulder PID%i,%i\n\r", desiredValueElbow,currentVal,lastPIDOutputElbow,ADCtoMillamps(getADC(0)));
+//	}
+//
+//
+//
+//	if(counter>5)
+//	{
+//		counter=0;
+//		driveMotor(SHOULDER_MOTOR,lastPIDOutputShoulder);
+//		driveMotor(ELBOW_MOTOR,-1*lastPIDOutputElbow);
+//		printf("Desired Value Shoulder: %f, Current Value: %i,Shoulder PID: %i,%i\n\r", desiredValueShoulder,currentVal,lastPIDOutputElbow,ADCtoMillamps(getADC(0)));
+//
+//	}
 
-
-
-	if(counter>5)
-	{
-		counter=0;
-		driveMotor(SHOULDER_MOTOR,lastPIDOutputShoulder);
-		driveMotor(ELBOW_MOTOR,-1*lastPIDOutputElbow);
-		printf("Desired Value Shoulder: %f, Current Value: %i,Shoulder PID: %i,%i\n\r", desiredValueShoulder,currentVal,lastPIDOutputElbow,ADCtoMillamps(getADC(0)));
-
-	}
-	/*
+	
 	if(~PINC & 0b1) //if PORT B0 is low change value
 	{}
 
@@ -119,11 +120,19 @@ void Lab2ALoop()
 	{
 
 		desiredValue = 90;
-	}*/
-	//degreesAAA = getADC(3);
-	//printf("Desired Position: (%i,%i)  Theta1: %f  Theta2: %f\n\r",x,y,xyToTheta1(x,y,signTheta2(x,y)*xyToTheta2(x,y)),signTheta2(x,y)*xyToTheta2(x,y));
-	//printf("Arm Angle, %f ADCValue: %f\n\r", adcToDegreesArm2(degreesAAA),degreesAAA);
-	//_delay_ms(400);
+	}
+	/*
+
+	theta1 = adcToDegreesArm1(getADC(2));
+	theta2 = adcToDegreesArm2(getADC(3));
+	double X = getX(theta1, theta2);
+	double Y = getY(theta1, theta2);
+*/
+	//printf("T1: %06.2f, T2: %06.2f, X: %06.2f, Y: %06.2f\n\r",theta1, theta2, X, Y);
+
+//	printf("Desired Position: (%i,%i)  Theta1: %f  Theta2: %f\n\r",x,y,xyToTheta1(x,y,signTheta2(x,y)*xyToTheta2(x,y)),signTheta2(x,y)*xyToTheta2(x,y));
+//	printf("Arm Angle, %f ADCValue: %f\n\r", adcToDegreesArm2(degreesAAA),degreesAAA);
+	_delay_ms(100);
 
 }
 
@@ -252,4 +261,5 @@ void showTriangleWave()
 			}
 		}
 }
+
 
