@@ -18,5 +18,8 @@ void TimerInit100Hz(void);
 void driveMotor(int speed,int motor);
 int updatePID(int desiredValue, int motor);
 
+#define STEP_TEST 0
+#define TRIANGLE_DRAW 1
+#define FANCY_DRAW_TRIANGLE 2
 
 #endif /* LAB2A_H_ */

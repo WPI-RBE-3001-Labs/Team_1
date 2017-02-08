@@ -19,16 +19,17 @@ int DAC1Val = 1023;
 int direction =1;
 volatile int hzFlag = 0;
 volatile int counter=0;
+volatile int counter2=0;
 
 //PID Vaiables
 int integrationSumShoulder = 0;
 double integrationSumElbow = 0;
 
-double KpShoulder = 35;
-double KiShoulder = 0.01;
+double KpShoulder = 45;
+double KiShoulder = 0.03;
 double KdShoulder = 0;
 
-double KpElbow = 10;
+double KpElbow = 20;
 double KiElbow = 0.01;
 double KdElbow = 0;
 
@@ -40,9 +41,6 @@ volatile unsigned int timer = 0;
 int DACValue = 1023;
 int ADCValue =0;
 
-volatile int counter2=0;
-double degreesAAA =0;
-
 int currentVal;
 int oldValShoulder = -999;
 int oldValElbow = -999;
@@ -53,8 +51,10 @@ int desiredValue = 0;
 
 int x = 0;
 int y=10;
-double desiredValueShoulder;
-double desiredValueElbow;
+double desiredValueShoulder=0;
+double desiredValueElbow=0;
+double theta1,theta2;
+int buttonFunction = TRIANGLE_DRAW;
 
 
 void Lab2AInit()
@@ -66,11 +66,12 @@ void Lab2AInit()
 	DDRC = (0<<DDC4|0<<DDC5|0<<DDC6|0<<DDC7);
 	PORTC = 0;
 
-	printf("Desired Position: (%i,%i)  Theta1: %f  Theta2: %f\n\r",x,y,xyToTheta1(x,y,signTheta2(x,y)*xyToTheta2(x,y)),signTheta2(x,y)*xyToTheta2(x,y));
-	desiredValueShoulder = xyToTheta1(x,y,signTheta2(x,y)*xyToTheta2(x,y));
-	desiredValueElbow = signTheta2(x,y)*xyToTheta2(x,y);
+	//printf("Desired Position: (%i,%i)  Theta1: %f  Theta2: %f\n\r",x,y,xyToTheta1(x,y,signTheta2(x,y)*xyToTheta2(x,y)),signTheta2(x,y)*xyToTheta2(x,y));
+//	desiredValueShoulder = xyToTheta1(x,y,signTheta2(x,y)*xyToTheta2(x,y));
+//	desiredValueElbow = signTheta2(x,y)*xyToTheta2(x,y);
 
 	//intiDAC();
+	printf("Main.c");
 
 }
 
@@ -87,48 +88,129 @@ void Lab2ALoop()
 
 
 
-	if(counter>5)
+	if(counter>3)
 	{
 		counter=0;
 		driveMotor(SHOULDER_MOTOR,lastPIDOutputShoulder);
 		driveMotor(ELBOW_MOTOR,-1*lastPIDOutputElbow);
-		printf("Desired Value Shoulder: %f, Current Value: %i,Shoulder PID: %i,%i\n\r", desiredValueShoulder,currentVal,lastPIDOutputElbow,ADCtoMillamps(getADC(0)));
+		//printf("Desired Value Shoulder: %f, Current Value: %i,Shoulder PID: %i,%i\n\r", desiredValueShoulder,currentVal,lastPIDOutputElbow,ADCtoMillamps(getADC(0)));
 
 	}
 
-	
-	if(~PINC & 0b1) //if PORT B0 is low change value
-	{}
-
-	if(~PINC & 0b10000) //if PORT B0 is low change value
+	if(buttonFunction == FANCY_DRAW_TRIANGLE)
 	{
-		desiredValue = 0;
-
+		if(counter2<500)
+		{
+			desiredValueShoulder = 2;
+			desiredValueElbow = 8;
+		}else{
+			if(counter2<1000)
+			{
+				desiredValueShoulder = 31;
+				desiredValueElbow = -42;
+			}else{
+				if(counter2<1500)
+				{
+					desiredValueShoulder = 58;
+					desiredValueElbow = -65;
+				}else{
+					if(counter2<2000)
+					{
+						desiredValueShoulder = 44;
+						desiredValueElbow = -80;
+					}else{
+						if(counter2<2500)
+						{
+							desiredValueShoulder = 46;
+							desiredValueElbow = -95;
+						}else{
+							if(counter2<3000)
+							{
+								desiredValueShoulder = 28;
+								desiredValueElbow = -66;
+							}else{
+								counter2=0;
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
-	if(~PINC & 0b100000) //if PORT B1 is low change value
+	if(~PINC & 0b10000) //if PORT C4 is low change value
 	{
-		desiredValue = 30;
+		switch(buttonFunction) {
+
+		   case STEP_TEST:
+		      desiredValueShoulder = 22;
+		      desiredValueElbow = 70;
+		   break;
+
+		   case TRIANGLE_DRAW:
+			   desiredValueShoulder = 2;
+			   desiredValueElbow = 8;
+		   break;
+		}
+
+
 	}
 
-	if(~PINC & 0b1000000) //if PORT B2 is low change value
+	if(~PINC & 0b100000) //if PORT C5 is low change value
 	{
-		desiredValue = 60;
+		switch(buttonFunction)
+		{
+			case STEP_TEST:
+				desiredValueShoulder = 63;
+				desiredValueElbow = -45;
+				break;
+
+			case TRIANGLE_DRAW:
+				desiredValueShoulder = 58;
+				desiredValueElbow = -65;
+				break;
+		}
 	}
 
-	if(~PINC & 0b10000000) //if PORT B3 is low start value
+	if(~PINC & 0b1000000) //if PORT C6 is low change value
 	{
+		switch(buttonFunction)
+		{
+			case STEP_TEST:
+				desiredValueShoulder = 30;
+				desiredValueElbow = -60;
+				break;
 
-		desiredValue = 90;
+			case TRIANGLE_DRAW:
+				desiredValueShoulder = 46;
+				desiredValueElbow = -95;
+				break;
+		}
+
 	}
 
-	/*
+	if(~PINC & 0b10000000) //if PORT C7 is low start value
+	{
+		switch(buttonFunction)
+		{
+			case STEP_TEST:
+				desiredValueShoulder = 50;
+				desiredValueElbow = 85;
+				break;
+
+			case TRIANGLE_DRAW:
+				break;
+		}
+	}
+
+
 	theta1 = adcToDegreesArm1(getADC(2));
 	theta2 = adcToDegreesArm2(getADC(3));
-	double X = getX(theta1, theta2);
-	double Y = getY(theta1, theta2);
-	printf("T1: %06.2f, T2: %06.2f, X: %06.2f, Y: %06.2f\n\r",theta1, theta2, X, Y);
-	*/
+//	double X = getX(theta1, theta2);
+//	double Y = getY(theta1, theta2);
+//	printf("T1:,%06.2f, T2:, %06.2f, X:, %06.2f, Y:, %06.2f\n\r",theta1, theta2, X, Y);
+//	printf("%06.2f,%06.2f,%06.2f,%06.2f\n",theta1, theta2, X, Y);
+
 
 //	printf("Desired Position: (%i,%i)  Theta1: %f  Theta2: %f\n\r",x,y,xyToTheta1(x,y,signTheta2(x,y)*xyToTheta2(x,y)),signTheta2(x,y)*xyToTheta2(x,y));
 //	printf("Arm Angle, %f ADCValue: %f\n\r", adcToDegreesArm2(degreesAAA),degreesAAA);
@@ -159,27 +241,27 @@ int updatePID(int desiredValue, int motor)
 		return (int) lastPIDOutputShoulder;
 	}
 	if(motor == ELBOW_MOTOR)
-		{
-			if(oldValElbow == -999){
-				oldValElbow = desiredValue;
-			}
-			if(oldValElbow != desiredValue){
-				oldValElbow = desiredValue;
-				integrationSumElbow = 0;
-			}
-			currentVal = adcToDegreesArm2(getADC(ELBOW_MOTOR_ADC_CHANNEL));
-			error = desiredValue - currentVal;
-			integrationSumElbow += (error/10);
-			diffErr = lastPosElbow-currentVal;
-			if(error < 5 && error > -5) error = 0;
-			lastPIDOutputElbow= (int) KpElbow*error + KiElbow*integrationSumElbow + KdElbow*diffErr;
-
-
-			//printf("Err %i, INT %i, DER %i, OUT %i\n\r",error,integrationSumShoulder,diffErr,(int)lastPIDOutputShoulder );
-			lastPosShoulder = currentVal;
-			return (int) lastPIDOutputElbow;
+	{
+		if(oldValElbow == -999){
+			oldValElbow = desiredValue;
 		}
-/*
+		if(oldValElbow != desiredValue){
+			oldValElbow = desiredValue;
+			integrationSumElbow = 0;
+		}
+		currentVal = adcToDegreesArm2(getADC(ELBOW_MOTOR_ADC_CHANNEL));
+		error = desiredValue - currentVal;
+		integrationSumElbow += (error/10);
+		diffErr = lastPosElbow-currentVal;
+		if(error < 5 && error > -5) error = 0;
+		lastPIDOutputElbow= (int) KpElbow*error + KiElbow*integrationSumElbow + KdElbow*diffErr;
+
+
+		//printf("Err %i, INT %i, DER %i, OUT %i\n\r",error,integrationSumShoulder,diffErr,(int)lastPIDOutputShoulder );
+		lastPosShoulder = currentVal;
+		return (int) lastPIDOutputElbow;
+	}
+	/*
 	if(motor == ELBOW_MOTOR)
 	{
 		currentVal = getADC(ELBOW_MOTOR_ADC_CHANNEL);
@@ -188,7 +270,7 @@ int updatePID(int desiredValue, int motor)
 		lastPIDOutputElbow=Kp;// *error+Ki*integrationSumElbow+Kd*(lastPIDOutputShoulder-currentVal);
 		return (int) lastPIDOutputElbow;
 	}
-*/
+	 */
 	return 0;
 }
 
@@ -238,26 +320,26 @@ ISR(TIMER0_COMPA_vect)
 void showTriangleWave()
 {
 	/*This is the code to display 2 triangle waves phase shifted 180 degrees Part 5*/
-		setDAC(0,DAC0Val);
-		setDAC(1,DAC1Val);
-		_delay_ms(10);
-		if(direction==1)
-		{
-			DAC0Val += 3;
-			DAC1Val -= 3;
+	setDAC(0,DAC0Val);
+	setDAC(1,DAC1Val);
+	_delay_ms(10);
+	if(direction==1)
+	{
+		DAC0Val += 3;
+		DAC1Val -= 3;
 
-			if(DAC0Val>1024)
-			{
-				direction =0;
-			}
-		}else{
-			DAC0Val -= 3;
-			DAC1Val += 3;
-			if(DAC0Val<0)
-			{
-				direction=1;
-			}
+		if(DAC0Val>1024)
+		{
+			direction =0;
 		}
+	}else{
+		DAC0Val -= 3;
+		DAC1Val += 3;
+		if(DAC0Val<0)
+		{
+			direction=1;
+		}
+	}
 }
 
 
