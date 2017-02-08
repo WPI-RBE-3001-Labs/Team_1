@@ -54,7 +54,8 @@ int y=10;
 double desiredValueShoulder=0;
 double desiredValueElbow=0;
 double theta1,theta2;
-int buttonFunction = TRIANGLE_DRAW;
+
+int buttonFunction = FANCY_DRAW_TRIANGLE;
 
 
 void Lab2AInit()
@@ -71,7 +72,6 @@ void Lab2AInit()
 //	desiredValueElbow = signTheta2(x,y)*xyToTheta2(x,y);
 
 	//intiDAC();
-	printf("Main.c");
 
 }
 
@@ -206,10 +206,10 @@ void Lab2ALoop()
 
 	theta1 = adcToDegreesArm1(getADC(2));
 	theta2 = adcToDegreesArm2(getADC(3));
-//	double X = getX(theta1, theta2);
-//	double Y = getY(theta1, theta2);
-//	printf("T1:,%06.2f, T2:, %06.2f, X:, %06.2f, Y:, %06.2f\n\r",theta1, theta2, X, Y);
-//	printf("%06.2f,%06.2f,%06.2f,%06.2f\n",theta1, theta2, X, Y);
+	double X = getX(theta1, theta2);
+	double Y = getY(theta1, theta2);
+	printf("T1:,%06.2f, T2:, %06.2f, X:, %06.2f, Y:, %06.2f\n\r",theta1, theta2, X, Y);
+	printf("%06.2f,%06.2f,%06.2f,%06.2f\n",theta1, theta2, X, Y);
 
 
 //	printf("Desired Position: (%i,%i)  Theta1: %f  Theta2: %f\n\r",x,y,xyToTheta1(x,y,signTheta2(x,y)*xyToTheta2(x,y)),signTheta2(x,y)*xyToTheta2(x,y));
