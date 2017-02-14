@@ -14,4 +14,6 @@
 #define SHOULDER_MOTOR_ADC_CHANNEL 2
 #define ELBOW_MOTOR_ADC_CHANNEL 3
 
+void driveMotor(int motor,int speed);
+
 #endif /* LIBRARIES_MOTORS_H_ */

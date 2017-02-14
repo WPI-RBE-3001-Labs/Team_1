@@ -10,5 +10,7 @@
 
 void Lab3Init();
 void Lab3Loop();
+void TimerInit100Hz();
+int updatePID(int desiredValue, int motor);
 
 #endif /* LAB3_H_ */

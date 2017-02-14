@@ -9,6 +9,6 @@
 #define LIBRARIES_DAC_H_
 
 void intiDAC();
-int dacToMillivolts(dacInput);
+int dacToMillivolts(int dacInput);
 
 #endif /* LIBRARIES_DAC_H_ */

@@ -8,9 +8,9 @@
 #include "RBELib/RBELib.h"
 #include <stdlib.h>
 
-long encoderCounts(int chan)
+signed long encoderCounts(int chan)
 {
-	long output =0;
+	signed long output =0;
 	switch(chan){
 	case 0:
 		ENCODER_SS_0_ddr = 1;
@@ -18,10 +18,10 @@ long encoderCounts(int chan)
 
 		ENCODER_SS_0 = 0;
 
-		spiTransceive(READ_CNTR);
+		output=spiTransceive(READ_CNTR);
 
 		output=spiTransceive(0);
-		output=output<<8;
+		output|=output<<8;
 
 		output=spiTransceive(0);
 		output|=output<<8;
@@ -40,16 +40,16 @@ long encoderCounts(int chan)
 
 		ENCODER_SS_1 = 0;
 
-		spiTransceive(READ_CNTR);
+		output=spiTransceive(READ_CNTR);
 
 		output=spiTransceive(0);
-		output=output<<8;
+		output|=output<<8;
 
 		output=spiTransceive(0);
-		output=output<<8;
+		output|=output<<8;
 
 		output=spiTransceive(0);
-		output=output<<8;
+		output|=output<<8;
 
 		ENCODER_SS_1 = 1;
 		return output;
@@ -71,6 +71,11 @@ void initEncoder(int chan)
 		spiTransceive(QUADRX1|FREE_RUN|FILTER_1|DISABLE_INDX);
 
 		ENCODER_SS_0 = 1;
+		ENCODER_SS_0 = 0;
+
+		spiTransceive(CLR_CNTR);
+		ENCODER_SS_0 = 1;
+
 
 		break;
 	case 1:
@@ -81,6 +86,10 @@ void initEncoder(int chan)
 
 		spiTransceive(WRITE_MDR0);
 		spiTransceive(QUADRX1|FREE_RUN|FILTER_1|DISABLE_INDX);
+		ENCODER_SS_0 = 0;
+
+		spiTransceive(CLR_CNTR);
+		ENCODER_SS_0 = 1;
 
 		ENCODER_SS_1 = 1;
 		break;
