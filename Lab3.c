@@ -72,14 +72,13 @@ signed long temp=0;
 int setSpeed=0;
 void Lab3Loop()
 {
-	/*
+
 	xG = GetAccelerationH48C(0);
 	yG = GetAccelerationH48C(1);
 	zG = GetAccelerationH48C(2);
 
 	printf("X:%i, Y: %i, Z: %i\n\r",xG,yG,zG);
 	_delay_ms(100);
-	*/
 //	if(HzFlag == 1)
 //	{
 //		temp = encoderCounts(0);
@@ -105,39 +104,39 @@ void Lab3Loop()
 //		_delay_ms(20);
 //	}
 
-	driveMotor(SHOULDER_MOTOR,setSpeed);
-
-	//THIS IS FOR THE DATA COLLECTION WITH MOTOR DISCONNECTED
-	//MOVE THIS PRINTF TO THE HZFLAG IF STATEMENT
-	//printf("Ticks:, %li\n\r",encoderCounts(0));
-	if(((~PIND) & (1<<PIND0))!=0)
-	{
-		setSpeed = 0;
-		printf("setSpeed: %i\n\r",setSpeed);
-		_delay_ms(50);
-	}
-
-	if(((~PIND) & (1<<PIND1))!=0)
-	{
-		setSpeed = 1023;
-		printf("setSpeed: %i\n\r",setSpeed);
-		_delay_ms(50);
-	}
-
-	if(((~PIND) & (1<<PIND2))!=0)
-	{
-		setSpeed = 512;
-		printf("setSpeed: %i\n\r",setSpeed);
-		_delay_ms(50);
-	}
-
-	if(((~PIND) & (1<<PIND3))!=0)
-	{
-		setSpeed = -512;
-		printf("setSpeed: %i\n\r",setSpeed);
-		_delay_ms(50);
-
-	}
+//	driveMotor(SHOULDER_MOTOR,setSpeed);
+//
+//	//THIS IS FOR THE DATA COLLECTION WITH MOTOR DISCONNECTED
+//	//MOVE THIS PRINTF TO THE HZFLAG IF STATEMENT
+//	//printf("Ticks:, %li\n\r",encoderCounts(0));
+//	if(((~PIND) & (1<<PIND0))!=0)
+//	{
+//		setSpeed = 0;
+//		//printf("setSpeed: %i\n\r",setSpeed);
+//		_delay_ms(50);
+//	}
+//
+//	if(((~PIND) & (1<<PIND1))!=0)
+//	{
+//		setSpeed = 1023;
+//		//printf("setSpeed: %i\n\r",setSpeed);
+//		_delay_ms(50);
+//	}
+//
+//	if(((~PIND) & (1<<PIND2))!=0)
+//	{
+//		setSpeed = 512;
+//		//printf("setSpeed: %i\n\r",setSpeed);
+//		_delay_ms(50);
+//	}
+//
+//	if(((~PIND) & (1<<PIND3))!=0)
+//	{
+//		setSpeed = -512;
+//		//printf("setSpeed: %i\n\r",setSpeed);
+//		_delay_ms(50);
+//
+//	}
 
 
 
