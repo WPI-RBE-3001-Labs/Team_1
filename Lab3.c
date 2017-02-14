@@ -32,16 +32,16 @@ long total =0;
 long temp=0;
 void Lab3Loop()
 {
-	/*
+
 	xG = GetAccelerationH48C(0);
 	yG = GetAccelerationH48C(1);
 	zG = GetAccelerationH48C(2);
 
 	printf("X:%i, Y: %i, Z: %i\n\r",xG,yG,zG);
-	_delay_ms(100);
-	*/
+	_delay_ms(500);
+	/*
 	temp = encoderCounts(0);
 	total+=temp;
 	printf("Ticks: %lu, Total:%lu\n\r",temp,total);
-	_delay_ms(1000);
+	_delay_ms(1000);*/
 }
