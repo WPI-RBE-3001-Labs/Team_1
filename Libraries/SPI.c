@@ -25,8 +25,8 @@ void initSPI()
 			 (1<<MSTR)|	//Select Master Mode
 			 (0<<CPOL)| //Positive clock signal
 			 (0<<CPHA)| //Send bit on rising edge of clock
-			 (1<<SPR1)|	//Set clock to Fosc/64
-			 (0<<SPR0);	//Set clock to Fosc/64
+			 (1<<SPR1)|	//Set clock to Fosc/128
+			 (1<<SPR0);	//Set clock to Fosc/128
 
 	SPSR =	(0<<SPI2X); //Do not double speed
 }

@@ -8,6 +8,7 @@
 #ifndef LAB3_H_
 #define LAB3_H_
 
-
+void Lab3Init();
+void Lab3Loop();
 
 #endif /* LAB3_H_ */
