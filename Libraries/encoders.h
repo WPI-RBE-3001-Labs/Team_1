@@ -73,5 +73,6 @@
 
 long encoderCounts(int chan);
 void initEncoder(int chan);
+void resetEncoder(int chan);
 
 #endif /* LIBRARIES_ENCODERS_H_ */
