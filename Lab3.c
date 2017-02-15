@@ -36,7 +36,7 @@ int lastPosElbow = 0;
 int lastPIDOutputShoulder = 0;
 int lastPIDOutputElbow = 0;
 volatile unsigned int timer = 0;
-double desiredValueShoulder=ADCHORZARM1;
+double desiredValueShoulder = 0;
 double desiredValueElbow=0;
 int currentVal;
 int oldValShoulder = -999;
@@ -46,21 +46,24 @@ int diffErr;
 int counter=0;
 
 
+
+
 void Lab3Init()
 {
 	initSPI();
 	initEncoder(0);
+	initADC(SHOULDER_MOTOR_ADC_CHANNEL);
+	initADC(ELBOW_MOTOR_ADC_CHANNEL);
 	TimerInit100Hz();
 
 	//Configure Buttons by setting pins to input
 	DDRD &= ~( (1<<DDD0)|(1<<DDD1)|(1<<DDD2)|(1<<DDD3) );
 
 	//printf("Desired Position: (%i,%i)  Theta1: %f  Theta2: %f\n\r",x,y,xyToTheta1(x,y,signTheta2(x,y)*xyToTheta2(x,y)),signTheta2(x,y)*xyToTheta2(x,y));
-//	desiredValueShoulder = xyToTheta1(x,y,signTheta2(x,y)*xyToTheta2(x,y));
-//	desiredValueElbow = signTheta2(x,y)*xyToTheta2(x,y);
+	//	desiredValueShoulder = xyToTheta1(x,y,signTheta2(x,y)*xyToTheta2(x,y));
+	//	desiredValueElbow = signTheta2(x,y)*xyToTheta2(x,y);
 
-	//printf("Lab3.c");
-	printf("+6Volts_Ticks\n\r");
+	//printf("Lab3.c\r\n");
 }
 
 signed int xG=0;
@@ -68,77 +71,88 @@ signed int yG=0;
 signed int zG=0;
 signed long total =0;
 signed long temp=0;
-int setSpeed=512;
-signed long tickTemp = 0;
+int setSpeed=0;
+int tickTemp = 0;
+double adcShoulder = 0;
+long encoderTotal = 0;
 void Lab3Loop()
 {
-
-//	xG = GetAccelerationH48C(0);
-//	yG = GetAccelerationH48C(1);
-//	zG = GetAccelerationH48C(2);
-//
-//	printf("X:%i, Y: %i, Z: %i\n\r",xG,yG,zG);
-//	_delay_ms(100);
+	xG = GetAccelerationH48C(0);
+	yG = GetAccelerationH48C(1);
+	zG = GetAccelerationH48C(2);
 	if(HzFlag == 1)
 	{
-		HzFlag = 0;
 		tickTemp = encoderCounts(0);
-		printf("%li\n\r",tickTemp);
-		//updatePID(desiredValueShoulder,SHOULDER_MOTOR);
+		encoderTotal += tickTemp;
+		adcShoulder = adcToDegreesArm1(getADC(SHOULDER_MOTOR_ADC_CHANNEL));
+
+		if( (error < 5 && error > -5) && (adcShoulder > -5 && adcShoulder < 2)){
+			encoderTotal = 0;
+		}
+
+
+		printf("%d, %d, %d\r\n", xG, yG, zG);
+		updatePID(desiredValueShoulder,SHOULDER_MOTOR);
+		HzFlag = 0;
 	}
 
-//	if(counter>30)
-//	{
-//		counter=0;
-//		driveMotor(SHOULDER_MOTOR,lastPIDOutputShoulder);
-//		printf("Desired Value Shoulder: %f, Current Value: %i,Shoulder PID: %i\n\r", desiredValueShoulder,currentVal,lastPIDOutputShoulder);
-//
-//	}
-//	if(((~PIND) & (1<<PIND0))!=0)
-//	{
-//		desiredValueShoulder = ADCHORZARM1;
-//		_delay_ms(20);
-//	}
-//
-//	if(((~PIND) & (1<<PIND1))!=0)
-//	{
-//		desiredValueShoulder = ADCVERTARM1;
-//		_delay_ms(20);
-//	}
+	if(counter>5)
+	{
+		counter=0;
+		driveMotor(SHOULDER_MOTOR,lastPIDOutputShoulder);
+		//printf("Desired Value Shoulder: %.0f, Current Value: %i,Shoulder PID: %i\n\r", desiredValueShoulder,currentVal,lastPIDOutputShoulder);
 
-	driveMotor(SHOULDER_MOTOR,setSpeed);
+	}
+
+	if( ((~PIND) & (1<<PIND0)) )
+	{
+		desiredValueShoulder = 0;
+		_delay_ms(20);
+	}
+
+	if(((~PIND) & (1<<PIND1)))
+	{
+		desiredValueShoulder = 90;
+		_delay_ms(20);
+	}
+	if(((~PIND) & (1<<PIND2)))
+	{
+		encoderTotal = 0;
+	}
+
+	//driveMotor(SHOULDER_MOTOR,setSpeed);
 
 	//THIS IS FOR THE DATA COLLECTION WITH MOTOR DISCONNECTED
 	//MOVE THIS PRINTF TO THE HZFLAG IF STATEMENT
-
-//	if(((~PIND) & (1<<PIND0)))
-//	{
-//		setSpeed = 0;
-//		printf("setSpeed set to 0\n\r");
-//		_delay_ms(50);
-//	}
-//
-//	if(((~PIND) & (1<<PIND1)))
-//	{
-//		setSpeed = 1023;
-//		printf("setSpeed set to 1023\n\r");
-//		_delay_ms(50);
-//	}
-//
-//	if(((~PIND) & (1<<PIND2)))
-//	{
-//		setSpeed = 512;
-//		printf("setSpeed set to 512\n\r");
-//		_delay_ms(50);
-//	}
-//
-//	if(((~PIND) & (1<<PIND3)))
-//	{
-//		setSpeed = -512;
-//		printf("setSpeed set to -512\n\r");
-//		_delay_ms(50);
-//
-//	}
+	//printf("%li\n\r",tickTemp);
+	//		if(((~PIND) & (1<<PIND0)))
+	//		{
+	//			setSpeed = 0;
+	//			printf("setSpeed set to 0\n\r");
+	//			_delay_ms(50);
+	//		}
+	//
+	//		if(((~PIND) & (1<<PIND1)))
+	//		{
+	//			setSpeed = 1023;
+	//			printf("setSpeed set to 1023\n\r");
+	//			_delay_ms(50);
+	//		}
+	//
+	//		if(((~PIND) & (1<<PIND2)))
+	//		{
+	//			setSpeed = 512;
+	//			printf("setSpeed set to 512\n\r");
+	//			_delay_ms(50);
+	//		}
+	//
+	//		if(((~PIND) & (1<<PIND3)))
+	//		{
+	//			setSpeed = -512;
+	//			printf("setSpeed set to -512\n\r");
+	//			_delay_ms(50);
+	//
+	//		}
 
 
 
@@ -180,6 +194,7 @@ ISR(TIMER0_COMPA_vect)
 
 int updatePID(int desiredValue, int motor)
 {
+
 	if(motor == SHOULDER_MOTOR)
 	{
 		if(oldValShoulder == -999){
