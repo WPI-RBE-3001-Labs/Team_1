@@ -53,15 +53,14 @@ void Lab3Init()
 	TimerInit100Hz();
 
 	//Configure Buttons by setting pins to input
-	DDRD &= ~((1<<DDD0)|(1<<DDD1)|(1<<DDD2)|(1<<DDD3));
+	DDRD &= ~( (1<<DDD0)|(1<<DDD1)|(1<<DDD2)|(1<<DDD3) );
 
 	//printf("Desired Position: (%i,%i)  Theta1: %f  Theta2: %f\n\r",x,y,xyToTheta1(x,y,signTheta2(x,y)*xyToTheta2(x,y)),signTheta2(x,y)*xyToTheta2(x,y));
 //	desiredValueShoulder = xyToTheta1(x,y,signTheta2(x,y)*xyToTheta2(x,y));
 //	desiredValueElbow = signTheta2(x,y)*xyToTheta2(x,y);
 
-	//intiDAC();
-
-	printf("Lab3.c");
+	//printf("Lab3.c");
+	printf("+6Volts_Ticks\n\r");
 }
 
 signed int xG=0;
@@ -69,22 +68,25 @@ signed int yG=0;
 signed int zG=0;
 signed long total =0;
 signed long temp=0;
-int setSpeed=0;
+int setSpeed=512;
+signed long tickTemp = 0;
 void Lab3Loop()
 {
 
-	xG = GetAccelerationH48C(0);
-	yG = GetAccelerationH48C(1);
-	zG = GetAccelerationH48C(2);
-
-	printf("X:%i, Y: %i, Z: %i\n\r",xG,yG,zG);
-	_delay_ms(100);
-//	if(HzFlag == 1)
-//	{
-//		temp = encoderCounts(0);
-//		updatePID(desiredValueShoulder,SHOULDER_MOTOR);
-//	}
+//	xG = GetAccelerationH48C(0);
+//	yG = GetAccelerationH48C(1);
+//	zG = GetAccelerationH48C(2);
 //
+//	printf("X:%i, Y: %i, Z: %i\n\r",xG,yG,zG);
+//	_delay_ms(100);
+	if(HzFlag == 1)
+	{
+		HzFlag = 0;
+		tickTemp = encoderCounts(0);
+		printf("%li\n\r",tickTemp);
+		//updatePID(desiredValueShoulder,SHOULDER_MOTOR);
+	}
+
 //	if(counter>30)
 //	{
 //		counter=0;
@@ -104,36 +106,36 @@ void Lab3Loop()
 //		_delay_ms(20);
 //	}
 
-//	driveMotor(SHOULDER_MOTOR,setSpeed);
-//
-//	//THIS IS FOR THE DATA COLLECTION WITH MOTOR DISCONNECTED
-//	//MOVE THIS PRINTF TO THE HZFLAG IF STATEMENT
-//	//printf("Ticks:, %li\n\r",encoderCounts(0));
-//	if(((~PIND) & (1<<PIND0))!=0)
+	driveMotor(SHOULDER_MOTOR,setSpeed);
+
+	//THIS IS FOR THE DATA COLLECTION WITH MOTOR DISCONNECTED
+	//MOVE THIS PRINTF TO THE HZFLAG IF STATEMENT
+
+//	if(((~PIND) & (1<<PIND0)))
 //	{
 //		setSpeed = 0;
-//		//printf("setSpeed: %i\n\r",setSpeed);
+//		printf("setSpeed set to 0\n\r");
 //		_delay_ms(50);
 //	}
 //
-//	if(((~PIND) & (1<<PIND1))!=0)
+//	if(((~PIND) & (1<<PIND1)))
 //	{
 //		setSpeed = 1023;
-//		//printf("setSpeed: %i\n\r",setSpeed);
+//		printf("setSpeed set to 1023\n\r");
 //		_delay_ms(50);
 //	}
 //
-//	if(((~PIND) & (1<<PIND2))!=0)
+//	if(((~PIND) & (1<<PIND2)))
 //	{
 //		setSpeed = 512;
-//		//printf("setSpeed: %i\n\r",setSpeed);
+//		printf("setSpeed set to 512\n\r");
 //		_delay_ms(50);
 //	}
 //
-//	if(((~PIND) & (1<<PIND3))!=0)
+//	if(((~PIND) & (1<<PIND3)))
 //	{
 //		setSpeed = -512;
-//		//printf("setSpeed: %i\n\r",setSpeed);
+//		printf("setSpeed set to -512\n\r");
 //		_delay_ms(50);
 //
 //	}
