@@ -19,7 +19,7 @@ int main(void)
 	initRBELib();
 	debugUSARTInit(115200);
 	Lab3Init();
-	printf("\n\rMain.c\n\r");
+	//printf("\n\rMain.c\n\r");
 
 
 	while(1){
