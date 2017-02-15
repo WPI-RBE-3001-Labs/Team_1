@@ -13,7 +13,7 @@ signed int GetAccelerationH48C(int axis)
 	int vRef = 0;
 	int MSBInput = 0;
 	int LSBInput = 0;
-	BYTE control =  0b110; //set single mode instead of differential
+	unsigned char control =  0b110; //set single mode instead of differential
 	ACC_DDR = 1; //set slave select to output than toggle high to low to start first command
 	ACC_SS = 1;
 	ACC_SS = 0;
