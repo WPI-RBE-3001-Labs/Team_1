@@ -71,7 +71,7 @@
 
 
 
-long encoderCounts(int chan);
+int encoderCounts(int chan);
 void initEncoder(int chan);
 void resetEncoder(int chan);
 

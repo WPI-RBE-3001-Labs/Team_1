@@ -10,9 +10,11 @@
 
 
 
-signed long encoderCounts(int chan)
+int encoderCounts(int chan)
 {
-	signed long output = 0;
+	int output = 0;
+	signed long temp1 = 0;
+	signed long temp0 = 0;
 	switch(chan){
 	case 0:
 		ENCODER_SS_0_ddr = 1;
@@ -20,18 +22,11 @@ signed long encoderCounts(int chan)
 
 		ENCODER_SS_0 = 0;
 
-		output=spiTransceive(READ_CNTR);
+		spiTransceive(READ_CNTR);
+		temp1 = spiTransceive(0);
+		temp0 = spiTransceive(0);
 
-		output=spiTransceive(0);
-		output|= (output<<8);
-
-		output=spiTransceive(0);
-		output|= (output<<8);
-
-		output=spiTransceive(0);
-		output|= (output<<8);
-
-		output|=spiTransceive(0);
+		output = (temp1<<8)+(temp0);
 
 		ENCODER_SS_0 = 1;
 		ENCODER_SS_0 = 0;
@@ -48,16 +43,11 @@ signed long encoderCounts(int chan)
 
 		ENCODER_SS_1 = 0;
 
-		output=spiTransceive(READ_CNTR);
+		spiTransceive(READ_CNTR);
+		temp1 = spiTransceive(0);
+		temp0 = spiTransceive(0);
 
-		output=spiTransceive(0);
-		output|=output<<8;
-
-		output=spiTransceive(0);
-		output|=output<<8;
-
-		output=spiTransceive(0);
-		output|=output<<8;
+		output = (temp1<<8)+(temp0);
 
 		ENCODER_SS_1 = 1;
 		ENCODER_SS_1 = 0;
@@ -76,12 +66,19 @@ void initEncoder(int chan)
 	switch(chan){
 	case 0:
 		ENCODER_SS_0_ddr = 1;
-		ENCODER_SS_0 = 1;
 
+		ENCODER_SS_0 = 1;
 		ENCODER_SS_0 = 0;
 
 		spiTransceive(WRITE_MDR0);
 		spiTransceive(QUADRX4|FREE_RUN|FILTER_1|DISABLE_INDX);
+
+
+		ENCODER_SS_0 = 1;
+		ENCODER_SS_0 = 0;
+
+		spiTransceive(WRITE_MDR1);
+		spiTransceive(0x02);
 
 		ENCODER_SS_0 = 1;
 		ENCODER_SS_0 = 0;
@@ -99,10 +96,14 @@ void initEncoder(int chan)
 
 		spiTransceive(WRITE_MDR0);
 		spiTransceive(QUADRX4|FREE_RUN|FILTER_1|DISABLE_INDX);
-		ENCODER_SS_0 = 0;
+		ENCODER_SS_1 = 0;
 
 		spiTransceive(CLR_CNTR);
-		ENCODER_SS_0 = 1;
+		ENCODER_SS_1 = 1;
+		ENCODER_SS_1 = 0;
+
+		spiTransceive(WRITE_MDR1);
+		spiTransceive(0x02);
 
 		ENCODER_SS_1 = 1;
 		break;
@@ -113,23 +114,23 @@ void initEncoder(int chan)
 
 void resetEncoder(int chan){
 	switch(chan){
-		case 0:
-			ENCODER_SS_0_ddr = 1;
-			ENCODER_SS_0 = 1;
-			ENCODER_SS_0 = 0;
+	case 0:
+		ENCODER_SS_0_ddr = 1;
+		ENCODER_SS_0 = 1;
+		ENCODER_SS_0 = 0;
 
-			spiTransceive(CLR_CNTR);
+		spiTransceive(CLR_CNTR);
 
-			ENCODER_SS_0 = 1;
-			break;
-		case 1:
-			ENCODER_SS_1_ddr = 1;
-			ENCODER_SS_1 = 1;
-			ENCODER_SS_1 = 0;
+		ENCODER_SS_0 = 1;
+		break;
+	case 1:
+		ENCODER_SS_1_ddr = 1;
+		ENCODER_SS_1 = 1;
+		ENCODER_SS_1 = 0;
 
-			spiTransceive(CLR_CNTR);
+		spiTransceive(CLR_CNTR);
 
-			ENCODER_SS_1 = 1;
-			break;
-		}
+		ENCODER_SS_1 = 1;
+		break;
+	}
 }
