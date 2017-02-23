@@ -15,6 +15,7 @@
 #include "Libraries/motors.h"
 #include "Libraries/ADC.h"
 #include "Libraries/DAC.h"
+#include "Libraries/rangeSensor.h"
 
 //ISR Variables
 volatile int HzFlag = 0;
@@ -55,6 +56,7 @@ void Lab3Init()
 	initADC(SHOULDER_MOTOR_ADC_CHANNEL);
 	initADC(ELBOW_MOTOR_ADC_CHANNEL);
 	TimerInit100Hz();
+	initADC(7);
 
 	//Configure Buttons by setting pins to input
 	DDRD &= ~( (1<<DDD0)|(1<<DDD1)|(1<<DDD2)|(1<<DDD3) );
@@ -77,6 +79,10 @@ double adcShoulder = 0;
 long encoderTotal = 0;
 void Lab3Loop()
 {
+	printf("Inches: %f.2\n\r",getIRInches(7));
+	_delay_ms(200);
+
+	/*
 	xG = GetAccelerationH48C(0);
 	yG = GetAccelerationH48C(1);
 	zG = GetAccelerationH48C(2);
@@ -155,7 +161,7 @@ void Lab3Loop()
 	//		}
 
 
-
+*/
 }
 
 void TimerInit100Hz()
