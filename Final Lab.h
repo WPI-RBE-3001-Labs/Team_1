@@ -8,8 +8,8 @@
 #ifndef LAB3_H_
 #define LAB3_H_
 
-void Lab3Init();
-void Lab3Loop();
+void FinalLabInit();
+void FinalLabLoop();
 void TimerInit100Hz();
 int updatePID(int desiredValue, int motor);
 
