@@ -84,6 +84,9 @@ int desiredY = 0;
 int currentX = 0;
 int currentY = 0;
 
+int maxCurRead = 0;
+int thisCurRead = 0;
+
 int primaryRangeSensorChannel = 7;
 int secondaryRangeSensorChannel = 6;
 
@@ -143,13 +146,31 @@ void FinalLabLoop() { //NON BLOCKING. NO WHILE or long FOR loops!
 		updatePID(0, ELBOW_MOTOR);
 
 		if ((currentX - desiredX) < 3 && (currentY - desiredY) < 3) { //TODO tune error range
-					state = movingToVert;
-				}
+			state = movingToVert;
+			maxCurRead = 0;
+		}
 
 		break;
 	case movingToVert:
+
+		updatePID(90, SHOULDER_MOTOR);
+		updatePID(0, ELBOW_MOTOR);
+
+		if((thisCurRead = ADCtoMillamps()) > maxCurRead){
+			maxCurRead = thisCurRead;
+		}
+
+		if ((currentX - desiredX) < 3 && (currentY - desiredY) < 3) { //TODO tune error range
+			if(maxCurRead > 55){ //TODO find actual difference in current to determine which block
+				state = movingHeavy;
+			} else {
+				state = movingLight;
+			}
+		}
+
 		break;
 	case movingLight:
+
 		break;
 	case movingHeavy:
 		break;
