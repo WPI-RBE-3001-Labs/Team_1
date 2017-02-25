@@ -89,6 +89,11 @@ int thisCurRead = 0;
 
 int primaryRangeSensorChannel = 7;
 int secondaryRangeSensorChannel = 6;
+/*
+ * TODO commands are given in angles, but error checking done in pos. Change to one or the other or adapt
+ * TODO errors need to be determined
+ * TODO checking pos needs to be done in each moving state. Right now no code updated currentX or currentY
+ */
 
 void FinalLabLoop() { //NON BLOCKING. NO WHILE or long FOR loops!
 
@@ -156,12 +161,12 @@ void FinalLabLoop() { //NON BLOCKING. NO WHILE or long FOR loops!
 		updatePID(90, SHOULDER_MOTOR);
 		updatePID(0, ELBOW_MOTOR);
 
-		if((thisCurRead = ADCtoMillamps()) > maxCurRead){
+		if ((thisCurRead = ADCtoMillamps()) > maxCurRead) {
 			maxCurRead = thisCurRead;
 		}
 
 		if ((currentX - desiredX) < 3 && (currentY - desiredY) < 3) { //TODO tune error range
-			if(maxCurRead > 55){ //TODO find actual difference in current to determine which block
+			if (maxCurRead > 55) { //TODO find actual difference in current to determine which block
 				state = movingHeavy;
 			} else {
 				state = movingLight;
@@ -170,11 +175,26 @@ void FinalLabLoop() { //NON BLOCKING. NO WHILE or long FOR loops!
 
 		break;
 	case movingLight:
+		updatePID(90, SHOULDER_MOTOR);
+		updatePID(-90, ELBOW_MOTOR);
+
+		if ((currentX - desiredX) < 3 && (currentY - desiredY) < 3) { //TODO tune error range
+			state = releasingBlock;
+		}
 
 		break;
 	case movingHeavy:
+		updatePID(90, SHOULDER_MOTOR);
+		updatePID(90, ELBOW_MOTOR);
+
+		if ((currentX - desiredX) < 3 && (currentY - desiredY) < 3) { //TODO tune error range
+			state = releasingBlock;
+		}
 		break;
 	case releasingBlock:
+
+		//TODO release Servo
+		state = waitingForStart;
 		break;
 	}
 
