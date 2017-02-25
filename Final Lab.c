@@ -139,6 +139,13 @@ void FinalLabLoop() { //NON BLOCKING. NO WHILE or long FOR loops!
 		break;
 
 	case movingToHor:
+		updatePID(0, SHOULDER_MOTOR);
+		updatePID(0, ELBOW_MOTOR);
+
+		if ((currentX - desiredX) < 3 && (currentY - desiredY) < 3) { //TODO tune error range
+					state = movingToVert;
+				}
+
 		break;
 	case movingToVert:
 		break;
