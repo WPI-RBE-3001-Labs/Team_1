@@ -79,27 +79,65 @@ enum States {
 
 int state = waitingForStart;
 int blockDist;
+int desiredX = 0;
+int desiredY = 0;
+int currentX = 0;
+int currentY = 0;
+
+int primaryRangeSensorChannel = 7;
+int secondaryRangeSensorChannel = 6;
 
 void FinalLabLoop() { //NON BLOCKING. NO WHILE or long FOR loops!
 
-	driveMotor(SHOULDER_MOTOR,lastPIDOutputShoulder); //Move the motors each iteration
-	driveMotor(ELBOW_MOTOR,lastPIDOutputElbow);
+	driveMotor(SHOULDER_MOTOR, lastPIDOutputShoulder); //Move the motors each iteration
+	driveMotor(ELBOW_MOTOR, lastPIDOutputElbow);
 
 	switch (state) {
+
 	case waitingForStart:
-		updatePID(45,SHOULDER_MOTOR);
-		updatePID(90,ELBOW_MOTOR);
-		if((blockDist = getIRmm()) < 100){
+
+		updatePID(45, SHOULDER_MOTOR);
+		updatePID(90, ELBOW_MOTOR);
+
+		if ((blockDist = getIRmm(primaryRangeSensorChannel)) < 100) {
+			//TODO inverse kinematics to set the desired angles
+			desiredX = 10;
+			desiredY = 10;
 			state = movingToBlockPos;
 		}
-		break;
-	case movingToBlockPos:
-		break;
-	case waitingForBlock:
-		break;
-	case closingOnBlock:
 
 		break;
+
+	case movingToBlockPos:
+
+		updatePID(45, SHOULDER_MOTOR); //TODO plug in relevant values
+		updatePID(90, ELBOW_MOTOR);
+
+		currentX = (int) adcToDegreesArm1(getADC(SHOULDER_MOTOR_ADC_CHANNEL));
+		currentY = (int) adcToDegreesArm1(getADC(ELBOW_MOTOR_ADC_CHANNEL));
+
+		if ((currentX - desiredX) < 3 && (currentY - desiredY) < 3) { //TODO tune error range
+			state = waitingForBlock;
+		}
+
+		break;
+
+	case waitingForBlock:
+
+		if (getIRmm(secondaryRangeSensorChannel) < 500) {
+			state = closingOnBlock;
+		}
+
+		break;
+
+	case closingOnBlock:
+		//TODO Update PID to lower the rest of the way
+		//TODO also close servo
+		if ((currentX - desiredX) < 3 && (currentY - desiredY) < 3) { //TODO tune error range
+			state = movingToHor;
+		}
+		break;
+
 	case movingToHor:
 		break;
 	case movingToVert:
