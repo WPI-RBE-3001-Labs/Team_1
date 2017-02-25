@@ -66,28 +66,39 @@ double adcShoulder = 0;
 long encoderTotal = 0;
 
 enum States {
-	waitingForStart,
-	movingToBlockPos,
-	waitingForBlock,
-	closingOnBlock,
-	movingToHor,
-	movingToVert,
-	movingLight,
-	movingHeavy,
-	releasingBlock
+	waitingForStart,    //Waiting for the range sensor to read a block
+	movingToBlockPos,   //moving the arm to the position where the block will be
+	waitingForBlock,    //waiting in position for the block to reach it
+	closingOnBlock,     //closing the servo
+	movingToHor,        //moving to full horizontal for the current sensor bit
+	movingToVert,       //moving to straight vertical while reading sensor
+	movingLight,        //if light block, move to this location
+	movingHeavy,        //if heavy block, move here
+	releasingBlock      //release servo
 };
 
 int state = waitingForStart;
+int blockDist;
 
-void FinalLabLoop() {
+void FinalLabLoop() { //NON BLOCKING. NO WHILE or long FOR loops!
+
+	driveMotor(SHOULDER_MOTOR,lastPIDOutputShoulder); //Move the motors each iteration
+	driveMotor(ELBOW_MOTOR,lastPIDOutputElbow);
+
 	switch (state) {
 	case waitingForStart:
+		updatePID(45,SHOULDER_MOTOR);
+		updatePID(90,ELBOW_MOTOR);
+		if((blockDist = getIRmm()) < 100){
+			state = movingToBlockPos;
+		}
 		break;
 	case movingToBlockPos:
 		break;
 	case waitingForBlock:
 		break;
 	case closingOnBlock:
+
 		break;
 	case movingToHor:
 		break;
