@@ -15,7 +15,9 @@
 #include "Libraries/ADC.h"
 #include "Libraries/DAC.h"
 #include "Libraries/rangeSensor.h"
+#include "Libraries/kinematics.h"
 
+#define gripperPin 1
 //ISR Variables
 volatile int HzFlag = 0;
 
@@ -44,6 +46,7 @@ int oldValElbow = -999;
 int error;
 int diffErr;
 int counter = 0;
+float theta1,theta2;
 
 void FinalLabInit() {
 	initSPI();
@@ -52,6 +55,10 @@ void FinalLabInit() {
 	initADC(ELBOW_MOTOR_ADC_CHANNEL);
 	TimerInit100Hz();
 	initADC(7);
+	setServo(0,300);//start belt
+	setServo(1,10);
+	theta1=70;
+	theta2=0;
 
 }
 
@@ -79,8 +86,8 @@ enum States {
 
 int state = waitingForStart;
 int blockDist;
-int desiredX = 0;
-int desiredY = 0;
+int desiredX = 8;
+int desiredY = 5;
 int currentX = 0;
 int currentY = 0;
 
@@ -96,43 +103,54 @@ int secondaryRangeSensorChannel = 6;
  */
 
 void FinalLabLoop() { //NON BLOCKING. NO WHILE or long FOR loops!
+	//printf("desiredX: %i,desiredY: %i\n\r",desiredX,desiredY);
+	if(HzFlag==1)
+	{
+		//theta2 = xyToTheta2(desiredX, desiredY);
+		//theta2 *= signTheta2(desiredX, desiredY);
+		//theta1 = xyToTheta1(desiredX, desiredY,theta2);
+		//printf("theta2:%f, theta1:%f",theta2,theta1);
+		//printf("LastPosShoulder: %f,LastPosElbow: %f\n\r",adcToDegreesArm1(getADC(SHOULDER_MOTOR_ADC_CHANNEL)),adcToDegreesArm2(getADC(ELBOW_MOTOR_ADC_CHANNEL)));
+		updatePID(theta1, SHOULDER_MOTOR);
+		updatePID(theta2, ELBOW_MOTOR);
+	}
 
-	driveMotor(SHOULDER_MOTOR, lastPIDOutputShoulder); //Move the motors each iteration
-	driveMotor(ELBOW_MOTOR, lastPIDOutputElbow);
-
+	if(counter >10)
+	{
+		driveMotor(SHOULDER_MOTOR, lastPIDOutputShoulder); //Move the motors each iteration
+		driveMotor(ELBOW_MOTOR, -1*lastPIDOutputElbow);
+		//printf("Motor Output Elbow:%i,Motor Output Shoulder:%i\n\r",lastPIDOutputElbow,lastPIDOutputShoulder);
+		counter=0;
+	}
 	switch (state) {
 
 	case waitingForStart:
-
-		updatePID(45, SHOULDER_MOTOR);
-		updatePID(90, ELBOW_MOTOR);
-
-		if ((blockDist = getIRmm(primaryRangeSensorChannel)) < 100) {
+		printf("Waiting For Start\n\r");
+		if ((blockDist = getIRInches(primaryRangeSensorChannel)) < 6) {
 			//TODO inverse kinematics to set the desired angles
-			desiredX = 10;
-			desiredY = 10;
-			state = movingToBlockPos;
+			//desiredX = 8;
+			//desiredY = 5;
+			theta1=60;
+			theta2=-75;
+			state = waitingForBlock;
 		}
 
 		break;
-
+/*
 	case movingToBlockPos:
-
-		updatePID(45, SHOULDER_MOTOR); //TODO plug in relevant values
-		updatePID(90, ELBOW_MOTOR);
-
+		printf("Moving to Block Pos\n\r");
 		currentX = (int) adcToDegreesArm1(getADC(SHOULDER_MOTOR_ADC_CHANNEL));
 		currentY = (int) adcToDegreesArm1(getADC(ELBOW_MOTOR_ADC_CHANNEL));
 
 		if ((currentX - desiredX) < 3 && (currentY - desiredY) < 3) { //TODO tune error range
 			state = waitingForBlock;
 		}
-
+		state = waitingForBlock;
 		break;
-
+*/
 	case waitingForBlock:
-
-		if (getIRmm(secondaryRangeSensorChannel) < 500) {
+		printf("Waiting For Block. Range Sensor: %f\n\r",getIRInches(secondaryRangeSensorChannel));
+		if (getIRInches(secondaryRangeSensorChannel) < 6) {
 			state = closingOnBlock;
 		}
 
@@ -140,28 +158,27 @@ void FinalLabLoop() { //NON BLOCKING. NO WHILE or long FOR loops!
 
 	case closingOnBlock:
 		//TODO Update PID to lower the rest of the way
-		//TODO also close servo
-		if ((currentX - desiredX) < 3 && (currentY - desiredY) < 3) { //TODO tune error range
-			state = movingToHor;
-		}
+		//TODONE also close servo
+		theta1=30;
+		theta2=-75;
+		setServo(1,10); //closes servo. Gripper should be plugged into Servo1
+		//if ((currentX - desiredX) < 3 && (currentY - desiredY) < 3) { //TODO tune error range
+		//	state = movingToHor;
+		//}
+		state=movingToHor;
 		break;
 
 	case movingToHor:
-		updatePID(0, SHOULDER_MOTOR);
-		updatePID(0, ELBOW_MOTOR);
 
 		if ((currentX - desiredX) < 3 && (currentY - desiredY) < 3) { //TODO tune error range
-			state = movingToVert;
+			//state = movingToVert;
 			maxCurRead = 0;
 		}
 
 		break;
 	case movingToVert:
 
-		updatePID(90, SHOULDER_MOTOR);
-		updatePID(0, ELBOW_MOTOR);
-
-		if ((thisCurRead = ADCtoMillamps()) > maxCurRead) {
+		if ((thisCurRead = ADCtoMillamps(getADC(0))) > maxCurRead) {
 			maxCurRead = thisCurRead;
 		}
 
@@ -175,17 +192,12 @@ void FinalLabLoop() { //NON BLOCKING. NO WHILE or long FOR loops!
 
 		break;
 	case movingLight:
-		updatePID(90, SHOULDER_MOTOR);
-		updatePID(-90, ELBOW_MOTOR);
-
 		if ((currentX - desiredX) < 3 && (currentY - desiredY) < 3) { //TODO tune error range
 			state = releasingBlock;
 		}
 
 		break;
 	case movingHeavy:
-		updatePID(90, SHOULDER_MOTOR);
-		updatePID(90, ELBOW_MOTOR);
 
 		if ((currentX - desiredX) < 3 && (currentY - desiredY) < 3) { //TODO tune error range
 			state = releasingBlock;
@@ -193,7 +205,8 @@ void FinalLabLoop() { //NON BLOCKING. NO WHILE or long FOR loops!
 		break;
 	case releasingBlock:
 
-		//TODO release Servo
+		//TODONE release Servo
+		setServo(gripperPin,100);
 		state = waitingForStart;
 		break;
 	}
@@ -223,7 +236,6 @@ ISR(TIMER0_COMPA_vect) {
 	HzFlag = 1;
 	counter++;
 }
-
 int updatePID(int desiredValue, int motor) {
 
 	if (motor == SHOULDER_MOTOR) {
