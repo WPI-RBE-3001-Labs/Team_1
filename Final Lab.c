@@ -170,7 +170,7 @@ void FinalLabLoop() { //NON BLOCKING. NO WHILE or long FOR loops!
 
 	case movingToHor:
 
-		if ((currentX - desiredX) < 3 && (currentY - desiredY) < 3) { //TODO tune error range
+		if (isFinalPos()) {
 			//state = movingToVert;
 			maxCurRead = 0;
 		}
@@ -182,7 +182,7 @@ void FinalLabLoop() { //NON BLOCKING. NO WHILE or long FOR loops!
 			maxCurRead = thisCurRead;
 		}
 
-		if ((currentX - desiredX) < 3 && (currentY - desiredY) < 3) { //TODO tune error range
+		if (isFinalPos()) {
 			if (maxCurRead > 55) { //TODO find actual difference in current to determine which block
 				state = movingHeavy;
 			} else {
@@ -192,14 +192,14 @@ void FinalLabLoop() { //NON BLOCKING. NO WHILE or long FOR loops!
 
 		break;
 	case movingLight:
-		if ((currentX - desiredX) < 3 && (currentY - desiredY) < 3) { //TODO tune error range
+		if (isFinalPos()) {
 			state = releasingBlock;
 		}
 
 		break;
 	case movingHeavy:
 
-		if ((currentX - desiredX) < 3 && (currentY - desiredY) < 3) { //TODO tune error range
+		if (isFinalPos()) {
 			state = releasingBlock;
 		}
 		break;
@@ -281,4 +281,21 @@ int updatePID(int desiredValue, int motor) {
 		return (int) lastPIDOutputElbow;
 	}
 	return 0;
+}
+
+int isFinalPos(){
+	int errorRange = 30;
+
+	int shoulder = 0;
+	if(lastPIDOutputShoulder < errorRange && lastPIDOutputShoulder > -1*errorRange){
+		shoulder = 1;
+	}
+
+	int elbow = 0;
+	if(lastPIDOutputElbow < errorRange && lastPIDOutputElbow > -1*errorRange){
+			elbow = 1;
+		}
+
+	return (shoulder * elbow);
+
 }
