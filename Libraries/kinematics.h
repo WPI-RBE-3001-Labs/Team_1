@@ -8,8 +8,8 @@
 #ifndef LIBRARIES_KINEMATICS_H_
 #define LIBRARIES_KINEMATICS_H_
 
-#define LENGTH1 6
-#define LENGTH2 4
+#define LENGTH1 150
+#define LENGTH2 150
 
 double xyToTheta1(double x, double y,double theata2);
 double xyToTheta2(double x, double y);
