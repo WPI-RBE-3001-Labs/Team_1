@@ -22,8 +22,8 @@ int adcToVolts(int adcRead);
 
 #define CurSens0 0
 #define CurSens1 1
-#define DSub0    2
-#define DSub1    3
+#define Pot0     2
+#define Pot1     3
 
 
 
