@@ -126,7 +126,7 @@ void FinalLabLoop() { //NON BLOCKING. NO WHILE or long FOR loops!
 
 	case waitingForStart:
 		printf("Waiting For Start\n\r");
-		if ((blockDist = getIRInches(primaryRangeSensorChannel)) < 6) {
+		if ((blockDist = getIRmm(primaryRangeSensorChannel)) < 6) {
 			//TODO inverse kinematics to set the desired angles
 			//desiredX = 8;
 			//desiredY = 5;
@@ -148,8 +148,8 @@ void FinalLabLoop() { //NON BLOCKING. NO WHILE or long FOR loops!
 		break;
 */
 	case waitingForBlock:
-		printf("Waiting For Block. Range Sensor: %f\n\r",getIRInches(secondaryRangeSensorChannel));
-		if (getIRInches(secondaryRangeSensorChannel) < 6) {
+		printf("Waiting For Block. Range Sensor: %f\n\r",getIRmm(secondaryRangeSensorChannel));
+		if (getIRmm(secondaryRangeSensorChannel) < 6) {//TODO update if statement
 			state = closingOnBlock;
 		}
 
@@ -157,11 +157,10 @@ void FinalLabLoop() { //NON BLOCKING. NO WHILE or long FOR loops!
 
 	case closingOnBlock:
 		//TODO Update PID to lower the rest of the way
-		//TODONE also close servo
 		theta1=30;
 		theta2=-75;
 		setServo(1,10); //closes servo. Gripper should be plugged into Servo1
-		//if ((currentX - desiredX) < 3 && (currentY - desiredY) < 3) { //TODO tune error range
+		//if (isFinalPos() {
 		//	state = movingToHor;
 		//}
 		state=movingToHor;
