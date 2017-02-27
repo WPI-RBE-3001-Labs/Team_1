@@ -20,4 +20,11 @@ int adcToVolts(int adcRead);
 #define ADCHORZPOSARM2 986 //ADC value from shoulder pot when are is vertical
 #define ADCHORZNEGARM2	225 //ADC value from shoulder pot when are is horizontal
 
+#define CurSens0 0
+#define CurSens1 1
+#define DSub0    2
+#define DSub1    3
+
+
+
 #endif /* LIBRARIES_ADC_H_ */
