@@ -98,7 +98,6 @@ int primaryRangeSensorChannel = 7;
 int secondaryRangeSensorChannel = 6;
 /*
  * TODO commands are given in angles, but error checking done in pos. Change to one or the other or adapt
- * TODO errors need to be determined
  * TODO checking pos needs to be done in each moving state. Right now no code updated currentX or currentY
  */
 
