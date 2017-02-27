@@ -142,10 +142,9 @@ void FinalLabLoop() { //NON BLOCKING. NO WHILE or long FOR loops!
 		currentX = (int) adcToDegreesArm1(getADC(SHOULDER_MOTOR_ADC_CHANNEL));
 		currentY = (int) adcToDegreesArm1(getADC(ELBOW_MOTOR_ADC_CHANNEL));
 
-		if ((currentX - desiredX) < 3 && (currentY - desiredY) < 3) { //TODO tune error range
+		if (isFinalPos()) {
 			state = waitingForBlock;
 		}
-		state = waitingForBlock;
 		break;
 */
 	case waitingForBlock:
