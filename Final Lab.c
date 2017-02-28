@@ -56,7 +56,7 @@ void FinalLabInit() {
 	initADC(ELBOW_MOTOR_ADC_CHANNEL);
 	TimerInit100Hz();
 	initADC(7);
-	setServo(0, 300); //start belt
+	setServo(0, 190); //start belt
 	setServo(1, 10);
 	theta1 = 70;
 	theta2 = 0;
@@ -77,7 +77,9 @@ enum States {
 	waitingForStart,    //Waiting for the range sensor to read a block
 	movingToBlockPos,   //moving the arm to the position where the block will be
 	waitingForBlock,    //waiting in position for the block to reach it
-	closingOnBlock,     //closing the servo
+	loweringOnBlock,     //closing the servo
+	closingOnBlock,     //closing servo
+	movingToHigh,		//moving up to not hit block on platform
 	movingToHor,        //moving to full horizontal for the current sensor bit
 	movingToVert,       //moving to straight vertical while reading sensor
 	movingLight,        //if light block, move to this location
@@ -97,89 +99,54 @@ int thisCurRead = 0;
 
 int primaryRangeSensorChannel = 7;
 int secondaryRangeSensorChannel = 6;
+
+int closeFlag = 0;
+int curTime = 0;
+
+int run =0;
+int run2=0;
 /*
  * TODO commands are given in angles, but error checking done in pos. Change to one or the other or adapt
  * TODO checking pos needs to be done in each moving state. Right now no code updated currentX or currentY
  */
 
-int t1 = 0;
-int t2 = 0;
-int servo = 0;
-int maxCur = 0;
-int cur = 0;
-int isHeavy = 0;
-int readCur = 0;
-
 void FinalLabLoop() { //NON BLOCKING. NO WHILE or long FOR loops!
 	//printf("desiredX: %i,desiredY: %i\n\r",desiredX,desiredY);
 
 	//Configure Buttons by setting pins to input
-	DDRD &= ~((1 << DDD0) | (1 << DDD1) | (1 << DDD2) | (1 << DDD3));
-
-	if (((~PIND) & (1 << PIND4))) {
-		t1 = 0;
-		t2 = 0;
-		printf("H\r\n");
-	}
-	if (((~PIND) & (1 << PIND5))) {
-		t1 = 80;
-		t2 = 0;
-		maxCur = 0;
-		counter2 = 0;
-		readCur = 1;
-		printf("V\r\n");
-	}
-	if (((~PIND) & (1 << PIND6))) {
-		servo = 50;
-		maxCur = 0;
-		printf("Close\r\n");
-	}
-	if (((~PIND) & (1 << PIND7))) {
-		servo = 100;
-		printf("Open\r\n");
-	}
-
-	if(counter2 > 50){
-		readCur = 0;
-	}
-
-	if (readCur) {
-		cur = ADCtoMillamps(getADC(0));// + ADCtoMillamps(getADC(0));
-		printf("MaxCur: %d\r\n", maxCur);
-		if (cur > maxCur) {
-			maxCur = cur;
-			if (maxCur > 850) {
-				isHeavy = 1;
-			} else {
-				isHeavy = 0;
-			}
-
-		}
-	}
+//	DDRD &= ~((1 << DDD0) | (1 << DDD1) | (1 << DDD2) | (1 << DDD3));
+//
+//	if (((~PIND) & (1 << PIND4))) {
+//		desiredX = 150;
+//		desiredY = 150;
+//	}
+//	if (((~PIND) & (1 << PIND5))) {
+//		desiredX = 290;
+//		desiredY = 50;
+//
+//	}
+//	if (((~PIND) & (1 << PIND6))) {
+//		desiredX = 250;
+//		desiredY = 50;
+//
+//	}
+//	if (((~PIND) & (1 << PIND7))) {
+//		desiredX = 200;
+//		desiredY = 50;
+//
+//	}
 
 	if (HzFlag == 1) {
 		HzFlag = 0;
-		//theta2 = xyToTheta2(desiredX, desiredY);
-		//theta2 *= signTheta2(desiredX, desiredY);
-		//theta1 = xyToTheta1(desiredX, desiredY,theta2);
-		//printf("theta2:%f, theta1:%f",theta2,theta1);
+		theta2 = xyToTheta2(desiredX, desiredY);
+		theta2 *= signTheta2(desiredX, desiredY);
+		theta1 = xyToTheta1(desiredX, desiredY, theta2);
+		//printf("theta2:%f, theta1:%f\r\n", theta2, theta1);
+		//printf("desX: %d, desY: %d\r\n", desiredX, desiredY);
 		//printf("LastPosShoulder: %f,LastPosElbow: %f\n\r",adcToDegreesArm1(getADC(SHOULDER_MOTOR_ADC_CHANNEL)),adcToDegreesArm2(getADC(ELBOW_MOTOR_ADC_CHANNEL)));
-
-		if (isFinalPos()) {
-			//printf("Final Pos\r\n");
-			if (isHeavy) {
-				printf("Heavy\r\n");
-				isHeavy = 0;
-			} else {
-				printf("Light\r\n");
-			}
-		} else {
-
-		}
-
-		updatePID(t1, SHOULDER_MOTOR);
-		updatePID(t2, ELBOW_MOTOR);
-		setServo(1, servo);
+		updatePID(theta1, SHOULDER_MOTOR);
+		updatePID(theta2, ELBOW_MOTOR);
+		//printf("%i\n\r",desiredY);
 	}
 
 	if (counter > 10) {
@@ -188,99 +155,144 @@ void FinalLabLoop() { //NON BLOCKING. NO WHILE or long FOR loops!
 		//printf("Motor Output Elbow:%i,Motor Output Shoulder:%i\n\r",lastPIDOutputElbow,lastPIDOutputShoulder);
 		counter = 0;
 	}
-	/*
-	 switch (state) {
 
-	 case waitingForStart:
-	 printf("Waiting For Start\n\r");
-	 if ((blockDist = getIRmm(primaryRangeSensorChannel)) < 150) {
-	 //TODO inverse kinematics to set the desired angles
-	 //desiredX = 8;
-	 //desiredY = 5;
-	 theta1=60;
-	 theta2=-75;
-	 state = waitingForBlock;
-	 }
+	switch (state) {
 
-	 break;
+	case waitingForStart:
+		printf("Waiting For Start\n\r");
+		desiredX = 200;
+		desiredY = 50;
+		if ((blockDist = getIRmm(primaryRangeSensorChannel)) < 150) {
+			state = waitingForBlock;
+			blockDist = getIRmm(primaryRangeSensorChannel);
+			desiredX = 100 + blockDist;
+		}
 
-	 case movingToBlockPos:
-	 printf("Moving to Block Pos\n\r");
-	 currentX = (int) adcToDegreesArm1(getADC(SHOULDER_MOTOR_ADC_CHANNEL));
-	 currentY = (int) adcToDegreesArm1(getADC(ELBOW_MOTOR_ADC_CHANNEL));
+		break;
 
-	 if (isFinalPos()) {
-	 state = waitingForBlock;
-	 }
-	 break;
+	case movingToBlockPos:
+		printf("Moving to Block Pos\n\r");
 
-	 case waitingForBlock:
-	 printf("Waiting For Block. Range Sensor: %f\n\r",getIRmm(secondaryRangeSensorChannel));
-	 if (getIRmm(secondaryRangeSensorChannel) < 150) {//TODO update if statement to reflect mm values
-	 state = closingOnBlock;
-	 }
+		desiredY = 100;
+		desiredX = 100 + blockDist;
 
-	 break;
+		if (isFinalPos()) {
+			state = waitingForBlock;
+		}
+		break;
 
-	 case closingOnBlock:
-	 //TODO Update PID to lower the rest of the way
-	 theta1=30;
-	 theta2=-75;
-	 setServo(1,10); //closes servo. Gripper should be plugged into Servo1
-	 //if (isFinalPos() {
-	 //	state = movingToHor;
-	 //}
-	 state=movingToHor;
-	 break;
+	case waitingForBlock:
+		printf("Waiting For Block. Secondary Range Sensor: %i\n\r",
+				desiredX);
+		if (getIRmm(secondaryRangeSensorChannel) < 190) { //TODO update if statement to reflect mm values
+			state = loweringOnBlock;
+		}
 
-	 case movingToHor:
+		break;
 
-	 if (isFinalPos()) {
-	 //state = movingToVert;
-	 maxCurRead = 0;
-	 }
+	case loweringOnBlock:
+		printf("Lowering on block\r\n");
+		desiredY = -10;
+		if(run == 0) {
+			run++;
+			counter2=0;
+			break;
+		}
+		if(counter2>75)
+		{
+			state = closingOnBlock;
+		}
+		break;
+	case closingOnBlock:
+		run=0;
+		setServo(1, 50); //closes servo. Gripper should be plugged into Servo1
+		//state = movingToHor;
+		printf("Closing On Block\r\n");
+		if(run2 == 0) {
+			run2++;
+			counter2=0;
+			break;
+		}
+		if(counter2>75)
+		{
+			state = movingToHigh;
+		}
+		break;
+	case movingToHigh:
+		if(!(desiredY ==200))
+		{
+			desiredY=200;
+			desiredX=200;
+			counter2=0;
+			printf("Set Counter2%f,%f\r\n",theta1,theta2);
+		}
+		if(counter2>150)
+		{
+			state = movingToHor;
+		}
+		break;
+	case movingToHor:
+		if(!(desiredX ==300))
+		{
+			desiredY=0;
+			desiredX=300;
+			counter2=0;
+		}
+		if(counter2>300)
+		{
+			state = movingToVert;
+			maxCurRead = 0;
+		}
+		printf("Moving Hor\r\n");
+		break;
+	case movingToVert:
+		if(!(desiredY ==305))
+		{
+			desiredY=305;
+			desiredX=0;
+			counter2=0;
+		}
+		printf("Moving Vert\r\n");
+		if ((thisCurRead = ADCtoMillamps(getADC(0))) > maxCurRead) {
+			maxCurRead = thisCurRead;
+		}
+		if(counter2>120) {
+			if (maxCurRead > 850) {
+				//state = movingHeavy;
 
-	 break;
-	 case movingToVert:
+				printf("Heavy%i",blockDist);
+			} else {
+				printf("Light");
+				//state = movingLight;
+			}
+		}
 
-	 if ((thisCurRead = ADCtoMillamps(getADC(0)) + ADCtoMilliamps(getADC(1))) > maxCurRead) {
-	 maxCurRead = thisCurRead;
-	 }
+		break;
+	case movingLight:
+		printf("Moving Light\r\n");
+		if (isFinalPos()) {
+			state = releasingBlock;
+		}
 
-	 if (isFinalPos()) {
-	 if (maxCurRead > 560) { //TODO find actual difference in current to determine which block
-	 state = movingLight;
-	 } else {
-	 state = movingHeavy;
-	 }
-	 }
+		break;
+	case movingHeavy:
+		printf("Moving Heavy\r\n");
 
-	 break;
-	 case movingLight:
-	 if (isFinalPos()) {
-	 state = releasingBlock;
-	 }
-
-	 break;
-	 case movingHeavy:
-
-	 if (isFinalPos()) {
-	 state = releasingBlock;
-	 }
-	 break;
-	 case releasingBlock:
-
-	 //TODONE release Servo
-	 setServo(gripperPin,100);
-	 state = waitingForStart;
-	 break;
-	 }
-	 */
+		if (isFinalPos()) {
+			state = releasingBlock;
+		}
+		break;
+	case releasingBlock:
+		printf("releasing block\r\n");
+		setServo(gripperPin, 100);
+		state = waitingForStart;
+		break;
+	}
 
 }
 
 void TimerInit100Hz() {
-	//Timer Setup
+//Timer Setup
 	TIMSK0 = (0 << OCIE0B) | (1 << OCIE0A) | //Enable compare A interrupt
 			(0 << TOIE0);
 
@@ -292,7 +304,7 @@ void TimerInit100Hz() {
 			(1 << CS00);
 	OCR0A = 179; //the compare register not supposed to be binary
 	sei();
-	//enable global interupts
+//enable global interupts
 }
 
 /**
@@ -351,7 +363,7 @@ int updatePID(int desiredValue, int motor) {
 }
 
 int isFinalPos() {
-	int errorRange = 30;
+	int errorRange = 100;
 
 	int shoulder = 0;
 	if (lastPIDOutputShoulder < errorRange
