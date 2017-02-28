@@ -270,18 +270,32 @@ void FinalLabLoop() { //NON BLOCKING. NO WHILE or long FOR loops!
 		break;
 	case movingLight:
 		printf("Moving Light\r\n");
-		if (isFinalPos()) {
+		if(!(desiredX ==300))
+		{
+			desiredY=0;
+			desiredX=300;
+			counter2=0;
+		}
+		if(counter2>300)
+		{
 			state = releasingBlock;
 		}
 
 		break;
 	case movingHeavy:
-		printf("Moving Heavy\r\n");
-
-		if (isFinalPos()) {
+		if(!(desiredX ==-100))
+		{
+			desiredY=200;
+			desiredX=-100;
+			counter2=0;
+		}
+		if(counter2>300)
+		{
 			state = releasingBlock;
 		}
 		break;
+
+
 	case releasingBlock:
 		printf("releasing block\r\n");
 		setServo(gripperPin, 100);
