@@ -11,6 +11,7 @@
 void FinalLabInit();
 void FinalLabLoop();
 void TimerInit100Hz();
+int isFinalPos();
 int updatePID(int desiredValue, int motor);
 
 #endif /* LAB3_H_ */
