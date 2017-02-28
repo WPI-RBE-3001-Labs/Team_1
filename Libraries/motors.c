@@ -44,13 +44,13 @@ void driveMotor(int motor,int speed)
 
 	if((speed>=0) & (motor == ELBOW_MOTOR))
 	{
-		setDAC(2,speed);
+		setDAC(2,speed*-1);
 		setDAC(3,0);
 	}
 
 	if((speed<0) & (motor == ELBOW_MOTOR))
 	{
 		setDAC(2,0);
-		setDAC(3,speed*-1);
+		setDAC(3,speed);
 	}
 }
