@@ -30,7 +30,7 @@ int signTheta2(double x,double y)
 
 double xyToTheta1(double x, double y,double theata2)
 {
-	//double theata2 = xyToTheta2(x,y);
+	theata2 = theata2 *3.14/180;
 	return (atan2(LENGTH2*sin(theata2)*x+(LENGTH1+LENGTH2*cos(theata2))*y,(LENGTH1+LENGTH2*cos(theata2))*x-LENGTH2*sin(theata2)*y))*(180/3.1415);
 }
 
